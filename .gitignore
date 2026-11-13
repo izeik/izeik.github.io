@@ -1,0 +1,3 @@
+# Personal server configuration
+.env.local
+.env.*.local
