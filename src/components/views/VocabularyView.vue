@@ -13,6 +13,7 @@ const {
   filteredExpressions,
   speak,
   nextExpression,
+  canAdvanceExpression,
 } = inject<TrainerContext>("trainer")!;
 const reinforcement = useReinforcementStore();
 const recall = ref(false);
@@ -56,6 +57,11 @@ function checkAnswer() {
       answer: word.text,
       hint: word.translation,
     });
+  else
+    store.resolveExerciseErrors("词汇回忆 · 待复习", {
+      sentence: prompt.value ?? "请根据中文回忆：" + word.meaning,
+      answer: word.text,
+    });
   store.logSession(1);
 }
 </script>
@@ -69,11 +75,7 @@ function checkAnswer() {
       <v-btn
         color="primary"
         prepend-icon="mdi-refresh"
-        :disabled="
-          store.planVocabularyIds.length
-            ? isLastPlanExpression
-            : !filteredExpressions.some((w) => w.id !== currentExpression.id)
-        "
+        :disabled="!canAdvanceExpression"
         @click="store.planVocabularyIds.length ? nextExpression() : randomWord()"
         >{{
           store.planVocabularyIds.length
@@ -170,7 +172,7 @@ function checkAnswer() {
               }}</v-btn
             ><v-btn
               variant="text"
-              :disabled="store.planVocabularyIds.length > 0 && isLastPlanExpression"
+              :disabled="!canAdvanceExpression"
               @click="nextExpression"
               >{{ isLastPlanExpression ? "已到本课最后一词" : "下一个" }}
               <v-icon end>mdi-arrow-right</v-icon></v-btn

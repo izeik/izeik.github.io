@@ -1,9 +1,7 @@
 import type { DailyLesson } from "./lessons";
 import { splitEnglishSentences } from "./articles";
 
-export function normalizeGapAnswer(answer: string) {
-  return answer.trim().toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, " ");
-}
+export { normalizeExerciseAnswer as normalizeGapAnswer } from "./reviewExercise";
 
 function literalPattern(text: string) {
   return new RegExp(

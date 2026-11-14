@@ -6,6 +6,7 @@ import { readingGaps } from "../../data/readingGaps";
 import GapFeedback from "../GapFeedback.vue";
 import { dailyLessons } from "../../data/lessons";
 import { readingTokens } from "../../data/readingTokens";
+import { normalizeExerciseAnswer as normalizeAnswer } from "../../data/reviewExercise";
 import { useReinforcementStore } from "../../stores/reinforcement";
 import WordLookup from "../WordLookup.vue";
 
@@ -61,9 +62,6 @@ const allAnswered = computed(() =>
     (q, i) => q.options[selectedAnswers.value[i]] !== undefined,
   ),
 );
-function normalizeAnswer(text: string) {
-  return text.trim().toLowerCase().replace(/\s+/g, " ").replace(/’/g, "'");
-}
 const hasNewAnswers = computed(
   () =>
     allAnswered.value &&
@@ -139,6 +137,11 @@ function checkReading() {
         },
       );
     }
+    if (selectedAnswers.value[i] === q.answer)
+      store.resolveExerciseErrors("文章阅读理解", {
+        sentence: q.prompt,
+        answer: q.options[q.answer]!,
+      });
   });
   store.logSession(2, 0, mistakes);
   lastAnswers.value = [...selectedAnswers.value];
@@ -158,8 +161,14 @@ function checkGap(index: number) {
       question.answer,
       "阅读补全 · 待复习",
       `${article.value.title} · 第 ${index + 1} 题`,
-      { sentence: question.sentence, answer: question.answer, hint: question.hint },
+      {
+        sentence: question.sentence,
+        answer: question.answer,
+        hint: question.hint,
+        acceptNatural: true,
+      },
     );
+  else store.resolveExerciseErrors("阅读补全 · 待复习", question);
   store.logSession(1);
 }
 function editGap(index: number) {
@@ -175,9 +184,13 @@ function onGapReviewed(
   if (!state.checked || gapCorrect(index)) return;
   state.accepted = result.verdict === "natural";
   const entry = store.errors.find(
-    (e) => e.type === "阅读补全 · 待复习" && e.exercise?.sentence === question.sentence,
+    (e) =>
+      e.type === "阅读补全 · 待复习" &&
+      e.exercise?.sentence === question.sentence &&
+      e.corrected === question.answer,
   );
-  if (entry && result.verdict === "natural") store.resolveError(entry.id, true, "ai");
+  if (result.verdict === "natural")
+    store.resolveExerciseErrors("阅读补全 · 待复习", question, "ai");
   if (entry && result.verdict === "unsuitable") {
     entry.note = `《${article.value.title}》 · 第 ${index + 1} 题 · AI 解析：${result.reason}`;
     if (entry.exercise) entry.exercise.hint = result.reason;

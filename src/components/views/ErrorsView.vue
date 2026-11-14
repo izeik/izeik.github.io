@@ -2,13 +2,14 @@
 import { computed, inject, ref } from "vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 import { useReinforcementStore } from "../../stores/reinforcement";
-import { normalizeGapAnswer } from "../../data/lessonGaps";
+import { exerciseAnswerMatches, acceptsNaturalReview } from "../../data/reviewExercise";
 import GapFeedback from "../GapFeedback.vue";
 const { store, page } = inject<TrainerContext>("trainer")!;
 const reinforcement = useReinforcementStore();
 const activeId = ref<number | null>(null),
   answer = ref(""),
-  checked = ref(false);
+  checked = ref(false),
+  acceptedAlternative = ref(false);
 const active = computed(() => store.errors.find((e) => e.id === activeId.value));
 const exercise = computed(
   () =>
@@ -19,18 +20,33 @@ const exercise = computed(
     },
 );
 const correct = computed(
-  () => normalizeGapAnswer(answer.value) === normalizeGapAnswer(exercise.value.answer),
+  () => exerciseAnswerMatches(exercise.value, answer.value) || acceptedAlternative.value,
 );
 function start(id: number) {
   activeId.value = id;
   answer.value = "";
   checked.value = false;
+  acceptedAlternative.value = false;
 }
 function check() {
   if (checked.value || !answer.value.trim() || !active.value) return;
   checked.value = true;
   store.resolveError(active.value.id, correct.value);
   reinforcement.recordReview(correct.value);
+  store.logSession(1, 0, Number(!correct.value));
+}
+function onReviewed(result: { verdict: string }) {
+  if (
+    !checked.value ||
+    !active.value ||
+    correct.value ||
+    !acceptsNaturalReview(exercise.value)
+  )
+    return;
+  if (result.verdict === "natural") {
+    acceptedAlternative.value = true;
+    store.resolveError(active.value.id, true, "ai");
+  }
 }
 const pending = computed(() => store.errors.filter((e) => !e.resolved).length);
 </script>
@@ -46,7 +62,14 @@ const pending = computed(() => store.errors.filter((e) => !e.resolved).length);
       ><div v-for="e in store.errors" :key="e.id" class="review-item py-4">
         <div class="d-flex justify-space-between align-center ga-2">
           <v-chip size="small" :color="e.resolved ? 'success' : 'warning'"
-            >{{ e.type }} · {{ e.resolved ? "已重做通过" : "待复习" }}</v-chip
+            >{{ e.type }} ·
+            {{
+              e.resolved
+                ? e.resolution === "ai"
+                  ? "AI认可通过"
+                  : "已订正通过"
+                : "待复习"
+            }}</v-chip
           >
           <div>
             <v-btn size="small" variant="text" @click="start(e.id)">重做本题</v-btn
@@ -109,13 +132,22 @@ const pending = computed(() => store.errors.filter((e) => !e.resolved).length);
             :type="correct ? 'success' : 'info'"
             variant="tonal"
             >{{
-              correct
-                ? "与参考一致，已标记为重做通过。"
-                : "与参考不同，仍保留在待复习中。"
+              acceptedAlternative
+                ? "AI已确认本句表达自然，已标记为通过。"
+                : correct
+                  ? "与参考一致，已标记为重做通过。"
+                  : "与参考不同，仍保留在待复习中。"
             }}参考：{{ exercise.answer }}。{{ exercise.hint }}</v-alert
           >
+          <p
+            v-if="checked && active?.type === '时态练习 · 待复习'"
+            class="text-caption muted mt-2"
+          >
+            本题需使用指定时态；AI解析可帮助理解，完成订正仍以本题允许的形式为准。
+          </p>
           <GapFeedback
             v-if="checked && (exercise.options || exercise.sentence.includes('______'))"
+            :key="activeId!"
             :kind="exercise.options ? 'choice' : 'gap'"
             :sentence="
               exercise.sentence +
@@ -124,6 +156,7 @@ const pending = computed(() => store.errors.filter((e) => !e.resolved).length);
             :reference="exercise.answer"
             :answer="answer"
             :focus="exercise.context || exercise.hint || '回忆当天表达'"
+            @reviewed="onReviewed"
           />
         </div></div
     ></v-card>

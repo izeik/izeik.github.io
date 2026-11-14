@@ -45,6 +45,8 @@ function submit() {
         hint: question.explanation,
       },
     );
+  else store.resolveExerciseErrors(`每日${question.type} · 待复习`, question);
+  store.logSession(1, 0, Number(!correct));
 }
 </script>
 <template>

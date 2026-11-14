@@ -56,16 +56,12 @@ function check(index: number) {
         sentence: q.sentence,
         answer: q.answer,
         hint: `${tense.name}：${tense.structure}。${q.reason}`,
+        alternatives: [...q.alternatives],
+        acceptNatural: false,
       },
     );
   else {
-    const entry = store.errors.find(
-      (e) =>
-        e.type === "时态练习 · 待复习" &&
-        e.exercise?.sentence === q.sentence &&
-        e.corrected === q.answer,
-    );
-    if (entry) store.resolveError(entry.id, true);
+    store.resolveExerciseErrors("时态练习 · 待复习", q);
   }
 }
 </script>

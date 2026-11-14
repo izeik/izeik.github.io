@@ -1,5 +1,10 @@
 import { COURSE_REVISION } from "../data/courseRevision";
-import { validReviewExercise, type ReviewExercise } from "../data/reviewExercise";
+import {
+  normalizeExerciseAnswer,
+  validReviewExercise,
+  type ReviewExercise,
+} from "../data/reviewExercise";
+import { tenses, mixedTenseExercises } from "../data/tenses";
 import { defineStore } from "pinia";
 import { computed, onScopeDispose, ref, watch } from "vue";
 import { expressions, questions } from "../data/content";
@@ -24,6 +29,30 @@ interface Session {
   mistakes: number;
 }
 const STORAGE_KEY = "eet-state";
+const tenseExercises = [...tenses.flatMap((t) => t.exercises), ...mixedTenseExercises];
+
+function restoreExercise(item: ErrorItem): ReviewExercise | undefined {
+  if (!validReviewExercise(item.exercise)) return undefined;
+  const exercise = item.exercise;
+  if (item.type === "时态练习 · 待复习") {
+    // Older mistakes saved only the canonical answer; recover the original permitted forms.
+    const original = tenseExercises.find(
+      (q) =>
+        q.sentence === exercise.sentence &&
+        normalizeExerciseAnswer(q.answer) === normalizeExerciseAnswer(exercise.answer),
+    );
+    return {
+      ...exercise,
+      alternatives: [...(original?.alternatives ?? exercise.alternatives ?? [])],
+      acceptNatural: false,
+    };
+  }
+  return {
+    ...exercise,
+    acceptNatural:
+      exercise.acceptNatural ?? (item.type === "阅读补全 · 待复习" && !exercise.options),
+  };
+}
 
 function localDateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -119,7 +148,7 @@ export const useLearningStore = defineStore("learning", () => {
     Array.isArray(saved.errors)
       ? saved.errors.filter(isErrorItem).map((item) => ({
           ...item,
-          exercise: validReviewExercise(item.exercise) ? item.exercise : undefined,
+          exercise: restoreExercise(item),
           resolved: item.resolved === true,
         }))
       : [],
@@ -305,6 +334,7 @@ export const useLearningStore = defineStore("learning", () => {
       duplicate.wrong = wrong;
       duplicate.note = note;
       duplicate.resolved = false;
+      duplicate.resolution = undefined;
       duplicate.date = new Date().toLocaleString("zh-CN");
       if (exercise) duplicate.exercise = exercise;
       return;
@@ -329,7 +359,22 @@ export const useLearningStore = defineStore("learning", () => {
     const item = errors.value.find((e) => e.id === id);
     if (item) {
       item.resolved = correct;
-      item.resolution = source;
+      item.resolution = correct ? source : undefined;
+    }
+  }
+  function resolveExerciseErrors(
+    type: string,
+    exercise: Pick<ReviewExercise, "sentence" | "answer">,
+    source: "review" | "ai" = "review",
+  ) {
+    for (const item of errors.value) {
+      if (
+        item.type === type &&
+        item.exercise?.sentence === exercise.sentence &&
+        normalizeExerciseAnswer(item.corrected) ===
+          normalizeExerciseAnswer(exercise.answer)
+      )
+        resolveError(item.id, true, source);
     }
   }
   function removeError(id: number) {
@@ -383,6 +428,7 @@ export const useLearningStore = defineStore("learning", () => {
     addError,
     removeError,
     resolveError,
+    resolveExerciseErrors,
     cycleSpeaking,
     completeArticle,
     startMonthlyPlan,

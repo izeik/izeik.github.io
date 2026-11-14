@@ -151,7 +151,12 @@ export function useTrainer() {
   );
   function nextExpression() {
     if (!store.planVocabularyIds.length) {
-      store.cycleExpression();
+      const choices = filteredExpressions.value;
+      if (!choices.length) return;
+      const position = choices.findIndex(
+        (word) => word.id === currentExpression.value.id,
+      );
+      store.expressionIndex = choices[(position + 1) % choices.length]!.id - 1;
       return;
     }
     const nextId = store.planVocabularyIds[planExpressionPosition.value + 1];
@@ -173,6 +178,11 @@ export function useTrainer() {
     ),
   );
   const pronunciationIndex = ref(0);
+  const canAdvanceExpression = computed(() =>
+    store.planVocabularyIds.length
+      ? !isLastPlanExpression.value
+      : filteredExpressions.value.some((word) => word.id !== currentExpression.value.id),
+  );
   const currentQuestion = computed(() => questions[pronunciationIndex.value]!);
   const allDialogues = speakingScenarios;
   const scenario = ref(allDialogues[0]!.label);
@@ -342,6 +352,7 @@ export function useTrainer() {
     speechVoiceDescription,
     currentExpression,
     isLastPlanExpression,
+    canAdvanceExpression,
     categoryLabel,
     filteredExpressions,
     currentQuestion,

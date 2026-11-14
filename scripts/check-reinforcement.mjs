@@ -48,10 +48,49 @@ try {
   assert.equal(transferTasks.length, 30);
   assert.equal(new Set(transferTasks).size, 30);
   const { aiTutor } = await load("server/aiTutor.ts", "ai");
-  const { validReviewExercise } = await load("src/data/reviewExercise.ts", "review");
+  const { validReviewExercise, exerciseAnswerMatches, acceptsNaturalReview } = await load(
+    "src/data/reviewExercise.ts",
+    "review",
+  );
   assert(!validReviewExercise({ sentence: "x", answer: "ok", hint: "", options: 42 }));
   assert(
     validReviewExercise({ sentence: "x", answer: "ok", hint: "", options: ["ok", "no"] }),
+  );
+  const reviewGap = {
+    sentence: "Leo ______ coffee.",
+    answer: "does not drink",
+    hint: "一般现在时",
+    alternatives: ["doesn't drink"],
+    acceptNatural: false,
+  };
+  assert(validReviewExercise(reviewGap));
+  assert(exerciseAnswerMatches(reviewGap, " DOESN’T   DRINK "));
+  assert(!exerciseAnswerMatches(reviewGap, "does not drinks"));
+  assert(!exerciseAnswerMatches(reviewGap, ""));
+  assert(!acceptsNaturalReview(reviewGap));
+  assert(!validReviewExercise({ ...reviewGap, alternatives: "doesn't drink" }));
+  assert(!validReviewExercise({ ...reviewGap, alternatives: [""] }));
+  assert(!validReviewExercise({ ...reviewGap, alternatives: [42] }));
+  assert(!validReviewExercise({ ...reviewGap, acceptNatural: "true" }));
+  const readingGap = {
+    sentence: "______ to meet you.",
+    answer: "Nice",
+    hint: "问候",
+    acceptNatural: true,
+  };
+  assert(acceptsNaturalReview(readingGap));
+  assert(!acceptsNaturalReview({ ...readingGap, acceptNatural: false }));
+  assert(!acceptsNaturalReview({ ...readingGap, sentence: "A choice question" }));
+  assert(!acceptsNaturalReview({ ...readingGap, options: ["Nice", "bad"] }));
+  assert(
+    !exerciseAnswerMatches(
+      { answer: "Nice", options: ["Nice", "bad"], alternatives: ["bad"] },
+      "bad",
+    ),
+  );
+  assert(exerciseAnswerMatches({ answer: "touch" }, "  TOUCH  "));
+  console.log(
+    "PASS shared review grading: permitted contractions, legacy canonical answers, invalid metadata and strict tense/choice AI policy.",
   );
   let mode = "ok";
   let system = "";

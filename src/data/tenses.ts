@@ -1,3 +1,5 @@
+import { exerciseAnswerMatches } from "./reviewExercise";
+
 export interface TenseExercise {
   sentence: string;
   verb: string;
@@ -733,12 +735,8 @@ export const tenses: TenseLesson[] = [
 ];
 
 export const tenseById = (id: string) => tenses.find((tense) => tense.id === id)!;
-const normalize = (answer: string) =>
-  answer.trim().toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, " ");
 export function tenseAnswerMatches(exercise: TenseExercise, answer: string) {
-  return [exercise.answer, ...exercise.alternatives].some(
-    (expected) => normalize(expected) === normalize(answer),
-  );
+  return exerciseAnswerMatches(exercise, answer);
 }
 
 export const mixedTenseExercises = [
