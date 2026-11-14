@@ -2,126 +2,323 @@ import { defineLesson } from "./shared";
 
 export default defineLesson({
   day: 6,
-  theme: "项目进度汇报",
+  theme: "简短汇报工作进展",
+  conversationGoal: "Explain completed work and the next step.",
+  context: "work",
   vocabularyIds: [
-    695, 696, 697, 698, 270, 320, 397, 699, 700, 701, 702, 703, 704, 705, 535, 430, 431,
-    435, 436, 589,
+    320, 695, 1122, 270, 1123, 1124, 1125, 1126, 1064, 1127, 1128, 1129, 61, 1130, 1131,
+    1132, 1133, 459, 1134, 458,
   ],
   vocabulary: [
-    {
-      id: 695,
-      text: "project",
-      meaning: "项目",
-      example:
-        "At Monday’s project meeting, Daniel provided an update on the payment page.",
-      translation: "在周一的项目会议上，丹尼尔汇报了付款页面的进度。",
-      category: "职场沟通",
-    },
-    {
-      id: 696,
-      text: "payment",
-      meaning: "付款",
-      example:
-        "At Monday’s project meeting, Daniel provided an update on the payment page.",
-      translation: "在周一的项目会议上，丹尼尔汇报了付款页面的进度。",
-      category: "职场沟通",
-    },
-    {
-      id: 697,
-      text: "meeting",
-      meaning: "会议",
-      example:
-        "At Monday’s project meeting, Daniel provided an update on the payment page.",
-      translation: "在周一的项目会议上，丹尼尔汇报了付款页面的进度。",
-      category: "职场沟通",
-    },
-    {
-      id: 698,
-      text: "deadline",
-      meaning: "截止日期",
-      example:
-        "The issue was time-sensitive, so he raised a concern and flagged a risk—the team might miss the deadline if they kept the original plan.",
-      translation:
-        "这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。",
-      category: "职场沟通",
-    },
-    {
-      id: 270,
-      text: "review",
-      meaning: "审查",
-      example:
-        "He shared the context: a bug in the test environment had delayed the final review.",
-      translation: "他说明了背景：测试环境中的一个错误拖延了最后的复核。",
-      category: "软件开发",
-      partOfSpeech: "verb",
-    },
     {
       id: 320,
       text: "update",
       meaning: "进展通报",
-      example:
-        "At Monday’s project meeting, Daniel provided an update on the payment page.",
-      translation: "在周一的项目会议上，丹尼尔汇报了付款页面的进度。",
-      category: "软件开发",
-      partOfSpeech: "verb",
+      example: "Leo gives his team an update on a project today.",
+      translation: "利奥今天向团队通报一个项目的进展。",
+      category: "Work",
     },
     {
-      id: 397,
-      text: "optional",
-      meaning: "可选的",
-      example:
-        "He asked everyone to get aligned and make a trade-off: release the core payment flow first, then add the optional feature later.",
-      translation: "他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。",
-      category: "软件开发",
-      partOfSpeech: "adj",
+      id: 695,
+      text: "project",
+      meaning: "项目",
+      example: "Leo gives his team an update on a project today.",
+      translation: "利奥今天向团队通报一个项目的进展。",
+      category: "Work",
     },
     {
-      id: 699,
-      text: "client",
-      meaning: "客户",
-      example:
-        "Daniel said, “Let’s be on the same page before we speak with the client.”",
-      translation: "丹尼尔说：“我们和客户沟通前先统一想法。”",
-      category: "职场沟通",
+      id: 1122,
+      text: "draft",
+      meaning: "初稿",
+      example: "The draft is ready for review, but one problem needs support.",
+      translation: "初稿已准备好供审阅，但有一个问题需要协助。",
+      category: "Work",
     },
     {
-      id: 700,
-      text: "timeline",
-      meaning: "时间安排",
-      example:
-        "They aligned on the timeline: the developers would finish the fix, QA would review it, and Daniel would hand the task over to the release lead on Thursday.",
-      translation:
-        "他们就时间安排达成一致：开发人员完成修复，QA 复核，然后丹尼尔在周四把任务移交给发布负责人。",
-      category: "职场沟通",
+      id: 270,
+      text: "review",
+      meaning: "审阅",
+      example: "The draft is ready for review, but one problem needs support.",
+      translation: "初稿已准备好供审阅，但有一个问题需要协助。",
+      category: "Work",
     },
     {
-      id: 701,
-      text: "risk",
-      meaning: "风险",
-      example:
-        "The issue was time-sensitive, so he raised a concern and flagged a risk—the team might miss the deadline if they kept the original plan.",
-      translation:
-        "这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。",
-      category: "职场沟通",
+      id: 1123,
+      text: "problem",
+      meaning: "问题",
+      example: "The draft is ready for review, but one problem needs support.",
+      translation: "初稿已准备好供审阅，但有一个问题需要协助。",
+      category: "Work",
     },
     {
-      id: 702,
-      text: "original plan",
-      meaning: "原计划",
+      id: 1124,
+      text: "progress",
+      meaning: "进展",
       example:
-        "The issue was time-sensitive, so he raised a concern and flagged a risk—the team might miss the deadline if they kept the original plan.",
-      translation:
-        "这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。",
-      category: "职场沟通",
+        "His manager asks, “Could you tell me what progress you have made so far?”",
+      translation: "经理问：“你可以说说到目前为止有什么进展吗？”",
+      category: "Work",
     },
     {
-      id: 703,
-      text: "final review",
-      meaning: "最终审查",
+      id: 1125,
+      text: "today",
+      meaning: "今天",
+      example: "Leo gives his team an update on a project today.",
+      translation: "利奥今天向团队通报一个项目的进展。",
+      category: "Work",
+    },
+    {
+      id: 1126,
+      text: "tomorrow",
+      meaning: "明天",
+      example:
+        "Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+      translation: "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+      category: "Work",
+    },
+    {
+      id: 1064,
+      text: "ready",
+      meaning: "准备好的",
+      example: "The draft is ready for review, but one problem needs support.",
+      translation: "初稿已准备好供审阅，但有一个问题需要协助。",
+      category: "Work",
+    },
+    {
+      id: 1127,
+      text: "support",
+      meaning: "支持",
+      example: "The draft is ready for review, but one problem needs support.",
+      translation: "初稿已准备好供审阅，但有一个问题需要协助。",
+      category: "Work",
+    },
+    {
+      id: 1128,
+      text: "I have finished",
+      meaning: "我已完成",
+      example:
+        "Leo replies, “I have finished the draft, and I am working on the final figures.”",
+      translation: "利奥回答：“我已完成初稿，正在处理最后的数字。”",
+      category: "Work",
+      usagePattern: "I have finished [task].",
+    },
+    {
+      id: 1129,
+      text: "I am working on",
+      meaning: "我正在处理",
+      example:
+        "Leo replies, “I have finished the draft, and I am working on the final figures.”",
+      translation: "利奥回答：“我已完成初稿，正在处理最后的数字。”",
+      category: "Work",
+      usagePattern: "I am working on [task].",
+    },
+    {
+      id: 61,
+      text: "so far",
+      meaning: "到目前为止",
+      example:
+        "His manager asks, “Could you tell me what progress you have made so far?”",
+      translation: "经理问：“你可以说说到目前为止有什么进展吗？”",
+      category: "Work",
+    },
+    {
+      id: 1130,
+      text: "not yet",
+      meaning: "还没有",
+      example:
+        "Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+      translation: "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+      category: "Work",
+    },
+    {
+      id: 1131,
+      text: "on track",
+      meaning: "按计划进行",
+      example:
+        "The manager asks, “Are we on track, and do you need help with the review?”",
+      translation: "经理问：“我们进度正常吗，审阅方面需要帮助吗？”",
+      category: "Work",
+    },
+    {
+      id: 1132,
+      text: "need help with",
+      meaning: "需要……方面的帮助",
+      example:
+        "The manager asks, “Are we on track, and do you need help with the review?”",
+      translation: "经理问：“我们进度正常吗，审阅方面需要帮助吗？”",
+      category: "Work",
+      usagePattern: "I need help with [task].",
+    },
+    {
+      id: 1133,
+      text: "the next step",
+      meaning: "下一步",
+      example:
+        "Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+      translation: "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+      category: "Work",
+    },
+    {
+      id: 459,
+      text: "get back to you",
+      meaning: "之后回复你",
+      example:
+        "Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+      translation: "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+      category: "Work",
+      usagePattern: "I will get back to you by [time].",
+    },
+    {
+      id: 1134,
+      text: "by tomorrow",
+      meaning: "明天之前",
+      example:
+        "Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+      translation: "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+      category: "Work",
+    },
+    {
+      id: 458,
+      text: "keep you posted",
+      meaning: "持续向你同步",
+      example:
+        "Before ending the call, Leo adds, “I will keep you posted if the plan changes.”",
+      translation: "通话结束前，利奥补充：“如果计划有变，我会持续向你同步。”",
+      category: "Work",
+      usagePattern: "I will keep you posted on [topic].",
+    },
+  ],
+  articleVocabularyIds: [
+    320, 695, 1122, 270, 1123, 1124, 1125, 1126, 1064, 1127, 1128, 1129, 61, 1130, 1131,
+    1132, 1133, 459, 1134, 458,
+  ],
+  article: {
+    id: 6,
+    title: "A Clear Progress Update",
+    topic: "通用职场",
+    level: "实用英语 · 对话与阅读",
+    summary: "围绕“简短汇报工作进展”练习提问、回应及确认下一步。",
+    paragraphs: [
+      {
+        text: "Leo gives his team an update on a project today. The draft is ready for review, but one problem needs support.",
+        translation:
+          "利奥今天向团队通报一个项目的进展。初稿已准备好供审阅，但有一个问题需要协助。",
+        sentenceTranslations: [
+          "利奥今天向团队通报一个项目的进展。",
+          "初稿已准备好供审阅，但有一个问题需要协助。",
+        ],
+      },
+      {
+        text: "His manager asks, “Could you tell me what progress you have made so far?” Leo replies, “I have finished the draft, and I am working on the final figures.” The manager asks, “Are we on track, and do you need help with the review?” Leo answers, “Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.”",
+        translation:
+          "经理问：“你可以说说到目前为止有什么进展吗？”利奥回答：“我已完成初稿，正在处理最后的数字。”经理问：“我们进度正常吗，审阅方面需要帮助吗？”利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+        sentenceTranslations: [
+          "经理问：“你可以说说到目前为止有什么进展吗？”",
+          "利奥回答：“我已完成初稿，正在处理最后的数字。”",
+          "经理问：“我们进度正常吗，审阅方面需要帮助吗？”",
+          "利奥回答：“暂时不需要，但下一步是检查数字，我能在明天前回复你。”",
+        ],
+      },
+      {
+        text: "Before ending the call, Leo adds, “I will keep you posted if the plan changes.” The team will check the figures before sending the report.",
+        translation:
+          "通话结束前，利奥补充：“如果计划有变，我会持续向你同步。”团队会先核对数字，再发送报告。",
+        sentenceTranslations: [
+          "通话结束前，利奥补充：“如果计划有变，我会持续向你同步。”",
+          "团队会先核对数字，再发送报告。",
+        ],
+      },
+    ],
+    questions: [
+      {
+        prompt: "What are the speakers mainly trying to do?",
+        options: [
+          "Explain completed work and the next step.",
+          "Invite a friend and agree on an alternative time.",
+          "Ask for repetition and confirm the details.",
+        ],
+        answer: 0,
+        explanation: "双方围绕“简短汇报工作进展”交流，并确认具体安排。",
+      },
+      {
+        prompt: "Which statement matches the agreed next step or result?",
+        options: [
+          "They will meet on Sunday afternoon at the café.",
+          "She writes room fourteen beside the address.",
+          "The team will check the figures before sending the report.",
+        ],
+        answer: 2,
+        explanation: "团队会先核对数字，再发送报告。",
+      },
+      {
+        prompt: "Which line is useful when you want to ask for a progress update?",
+        options: [
+          "Could you repeat the number and speak more slowly, please?",
+          "Could you tell me what progress you have made so far?",
+          "Would you like to meet up this weekend, and are you free on Saturday?",
+        ],
+        answer: 1,
+        explanation: "经理问：“你可以说说到目前为止有什么进展吗？”",
+      },
+    ],
+    gap: {
+      sentence: "Leo replies, “______ the draft, and I am working on the final figures.”",
+      answer: "I have finished",
+      hint: "我已完成",
+    },
+  },
+  grammarBlank: "have",
+  grammar: {
+    id: 1006,
+    title: "现在完成时：汇报已完成事项",
+    explanation: "I have finished 强调目前已完成的工作；have 后接过去分词。",
+    example:
+      "Leo replies, “I have finished the draft, and I am working on the final figures.”",
+    wrong: "I have finish the draft.",
+    correct: "I have finished the draft.",
+    note: "I have finished 强调目前已完成的工作；have 后接过去分词。",
+  },
+  vocabularyGroups: [
+    {
+      title: "场景与需求",
+      vocabularyIds: [320, 695, 1122, 270, 1123, 1128, 1129, 61, 1130, 1131],
+    },
+    {
+      title: "回应与下一步",
+      vocabularyIds: [1124, 1125, 1126, 1064, 1127, 1132, 1133, 459, 1134, 458],
+    },
+  ],
+  dialogue: [
+    {
+      speaker: "A",
+      text: "Could you tell me what progress you have made so far?",
+      translation: "你可以说说到目前为止有什么进展吗？",
+    },
+    {
+      speaker: "B",
+      text: "I have finished the draft, and I am working on the final figures.",
+      translation: "我已完成初稿，正在处理最后的数字。",
+    },
+    {
+      speaker: "A",
+      text: "Are we on track, and do you need help with the review?",
+      translation: "我们进度正常吗，审阅方面需要帮助吗？",
+    },
+    {
+      speaker: "B",
+      text: "Not yet, but the next step is to check the figures, and I can get back to you by tomorrow.",
+      translation: "暂时不需要，但下一步是检查数字，我能在明天前回复你。",
+    },
+  ],
+  extensionVocabulary: [
+    {
+      id: 535,
+      text: "test environment",
+      meaning: "测试环境",
       example:
         "He shared the context: a bug in the test environment had delayed the final review.",
       translation: "他说明了背景：测试环境中的一个错误拖延了最后的复核。",
-      category: "职场沟通",
+      category: "Work",
     },
     {
       id: 704,
@@ -130,165 +327,7 @@ export default defineLesson({
       example:
         "He asked everyone to get aligned and make a trade-off: release the core payment flow first, then add the optional feature later.",
       translation: "他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。",
-      category: "职场沟通",
-    },
-    {
-      id: 705,
-      text: "revised deadline",
-      meaning: "调整后的截止日期",
-      example:
-        "“If we focus on the core flow, we can still meet the revised deadline,” he explained.",
-      translation: "“如果我们专注于核心流程，仍然能赶上调整后的截止日期，”他解释道。",
-      category: "职场沟通",
-    },
-    {
-      id: 535,
-      text: "test environment",
-      meaning: "测试环境",
-      example:
-        "He shared the context: a bug in the test environment had delayed the final review.",
-      translation: "他说明了背景：测试环境中的一个错误拖延了最后的复核。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 430,
-      text: "make a trade-off",
-      meaning: "做出权衡",
-      example:
-        "He asked everyone to get aligned and make a trade-off: release the core payment flow first, then add the optional feature later.",
-      translation: "他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 431,
-      text: "set expectations",
-      meaning: "设定预期",
-      example:
-        "His manager agreed that it was better to set expectations clearly than to promise a date they could not meet.",
-      translation: "经理同意，清楚设定预期比承诺一个无法实现的日期更好。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 435,
-      text: "get aligned",
-      meaning: "达成一致",
-      example:
-        "He asked everyone to get aligned and make a trade-off: release the core payment flow first, then add the optional feature later.",
-      translation: "他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 436,
-      text: "be on the same page",
-      meaning: "理解一致",
-      example:
-        "Daniel said, “Let’s be on the same page before we speak with the client.”",
-      translation: "丹尼尔说：“我们和客户沟通前先统一想法。”",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 589,
-      text: "time-sensitive",
-      meaning: "时间紧迫的",
-      example:
-        "The issue was time-sensitive, so he raised a concern and flagged a risk—the team might miss the deadline if they kept the original plan.",
-      translation:
-        "这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。",
-      category: "职场沟通",
-      partOfSpeech: "adj",
+      category: "Work",
     },
   ],
-  articleVocabularyIds: [
-    695, 696, 697, 698, 270, 320, 397, 699, 700, 701, 702, 703, 704, 705, 535, 430, 431,
-    435, 436, 589,
-  ],
-  article: {
-    id: 6,
-    title: "A Clear Project Update",
-    topic: "职场沟通",
-    level: "中级 · 约 2 分钟",
-    summary:
-      "团队发现项目可能无法按期交付，Daniel 通过清晰汇报风险、调整预期并记录决定，和相关方重新对齐时间安排。",
-    paragraphs: [
-      {
-        text: "At Monday’s project meeting, Daniel provided an update on the payment page. He shared the context: a bug in the test environment had delayed the final review. The issue was time-sensitive, so he raised a concern and flagged a risk—the team might miss the deadline if they kept the original plan. He asked everyone to get aligned and make a trade-off: release the core payment flow first, then add the optional feature later. His manager agreed that it was better to set expectations clearly than to promise a date they could not meet. Daniel said, “Let’s be on the same page before we speak with the client.”",
-        translation:
-          "在周一的项目会议上，丹尼尔汇报了付款页面的进度。他说明了背景：测试环境中的一个错误拖延了最后的复核。这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。经理同意，清楚设定预期比承诺一个无法实现的日期更好。丹尼尔说：“我们和客户沟通前先统一想法。”",
-        sentenceTranslations: [
-          "在周一的项目会议上，丹尼尔汇报了付款页面的进度。",
-          "他说明了背景：测试环境中的一个错误拖延了最后的复核。",
-          "这个问题时间紧迫，所以他提出顾虑并指出风险——如果照原计划进行，团队可能会错过截止日期。",
-          "他请大家达成一致并做出权衡：先发布核心支付流程，之后再添加可选功能。",
-          "经理同意，清楚设定预期比承诺一个无法实现的日期更好。",
-          "丹尼尔说：“我们和客户沟通前先统一想法。”",
-        ],
-      },
-      {
-        text: "The team reviewed the test environment and estimated that fixing the bug would take two more days. Daniel proposed pushing back the date by one day to buy them some time for testing. They aligned on the timeline: the developers would finish the fix, QA would review it, and Daniel would hand the task over to the release lead on Thursday. He documented the decision and notified the stakeholders. “If we focus on the core flow, we can still meet the revised deadline,” he explained. The manager asked him to keep the client informed and share another update the next morning.",
-        translation:
-          "团队检查了测试环境，估计修复错误还需要两天。丹尼尔提议把日期推迟一天，为测试争取一些时间。他们就时间安排达成一致：开发人员完成修复，QA 复核，然后丹尼尔在周四把任务移交给发布负责人。他记录了决定并通知相关方。“如果我们专注于核心流程，仍然能赶上调整后的截止日期，”他解释道。经理让他及时告知客户，并在第二天早上再提供一次进度更新。",
-        sentenceTranslations: [
-          "团队检查了测试环境，估计修复错误还需要两天。",
-          "丹尼尔提议把日期推迟一天，为测试争取一些时间。",
-          "他们就时间安排达成一致：开发人员完成修复，QA 复核，然后丹尼尔在周四把任务移交给发布负责人。",
-          "他记录了决定并通知相关方。",
-          "“如果我们专注于核心流程，仍然能赶上调整后的截止日期，”他解释道。",
-          "经理让他及时告知客户，并在第二天早上再提供一次进度更新。",
-        ],
-      },
-    ],
-    questions: [
-      {
-        prompt: "Why did Daniel suggest pushing back the date by one day?",
-        options: [
-          "To buy time for testing after the bug fix.",
-          "Because the client had canceled the project.",
-          "Because the core payment flow was already removed.",
-        ],
-        answer: 0,
-        explanation: "团队估计修复还要两天，推迟一天可以为后续测试争取时间。",
-      },
-      {
-        prompt: "Which statement best describes the main idea?",
-        options: [
-          "Clear updates help a team reset expectations and agree on a realistic delivery plan.",
-          "A team should keep the original deadline even when the work is not ready.",
-          "Only the manager needs to know about project risks.",
-        ],
-        answer: 0,
-        explanation: "Daniel 说明背景和风险，与团队重新对齐范围、时间表及任务负责人。",
-      },
-      {
-        prompt: "What did the team agree to deliver first?",
-        options: [
-          "The core payment flow, with the optional feature later.",
-          "Every feature before testing begins.",
-          "Only a status report, without fixing the bug.",
-        ],
-        answer: 0,
-        explanation: "团队权衡后决定先发布核心支付流程，之后再补充可选功能。",
-      },
-    ],
-    gap: {
-      sentence: "Daniel documented the decision and notified the ______.",
-      answer: "stakeholders",
-      hint: "指项目中需要了解进展的相关方。",
-    },
-  },
-  grammarBlank: "had delayed",
-  grammar: {
-    id: 1006,
-    title: "过去完成时：说明项目延迟的原因",
-    explanation: "先发生的延误用 had + 过去分词，之后的汇报用一般过去时。",
-    example:
-      "He shared the context: a bug in the test environment had delayed the final review.",
-    wrong: "A bug had delay the final review.",
-    correct: "A bug had delayed the final review.",
-    note: "had delayed 表明延误发生在 Daniel 说明背景之前。",
-  },
 });

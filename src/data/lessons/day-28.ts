@@ -2,146 +2,321 @@ import { defineLesson } from "./shared";
 
 export default defineLesson({
   day: 28,
-  theme: "测试修复并准备发布",
+  theme: "交接工作与确认下一步",
+  conversationGoal: "Hand over a task and confirm what remains to be done.",
+  context: "work",
   vocabularyIds: [
-    896, 877, 178, 897, 898, 167, 899, 900, 337, 336, 901, 902, 903, 904, 267, 160, 164,
-    268, 423, 621,
+    778, 1058, 926, 863, 736, 1063, 1064, 1317, 829, 1346, 1347, 1348, 1128, 1349, 1133,
+    1237, 1324, 1350, 6, 100,
   ],
   vocabulary: [
     {
-      id: 896,
-      text: "login",
-      meaning: "登录",
+      id: 778,
+      text: "colleague",
+      meaning: "同事",
       example:
-        "After fixing a login problem, the developer did not release the change immediately.",
-      translation: "修复登录问题后，开发人员没有立刻发布改动。",
-      category: "职场沟通",
+        "Leo prepares a document with the status of a task before a colleague takes over.",
+      translation: "利奥在同事接手前，准备文档说明一项任务的状态。",
+      category: "Work",
     },
     {
-      id: 877,
-      text: "change",
-      meaning: "变更",
+      id: 1058,
+      text: "task",
+      meaning: "任务",
       example:
-        "After fixing a login problem, the developer did not release the change immediately.",
-      translation: "修复登录问题后，开发人员没有立刻发布改动。",
-      category: "职场沟通",
+        "Leo prepares a document with the status of a task before a colleague takes over.",
+      translation: "利奥在同事接手前，准备文档说明一项任务的状态。",
+      category: "Work",
     },
     {
-      id: 178,
-      text: "failure",
-      meaning: "失败",
+      id: 926,
+      text: "status",
+      meaning: "状态",
       example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "软件开发",
-      partOfSpeech: "noun",
+        "Leo prepares a document with the status of a task before a colleague takes over.",
+      translation: "利奥在同事接手前，准备文档说明一项任务的状态。",
+      category: "Work",
     },
     {
-      id: 897,
-      text: "suite",
-      meaning: "套件",
+      id: 863,
+      text: "owner",
+      meaning: "负责人",
       example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "职场沟通",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 898,
-      text: "staging",
-      meaning: "预发布",
+      id: 736,
+      text: "document",
+      meaning: "文档",
       example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "职场沟通",
+        "Leo prepares a document with the status of a task before a colleague takes over.",
+      translation: "利奥在同事接手前，准备文档说明一项任务的状态。",
+      category: "Work",
     },
     {
-      id: 167,
-      text: "issue",
+      id: 1063,
+      text: "question",
       meaning: "问题",
       example:
-        "The first run found a different issue in password reset, so she corrected that too.",
-      translation: "第一次测试发现密码重置还有另一个问题，于是她也修复了它。",
-      category: "软件开发",
-      partOfSpeech: "noun",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 899,
-      text: "password",
-      meaning: "密码",
+      id: 1064,
+      text: "ready",
+      meaning: "准备好的",
       example:
-        "The first run found a different issue in password reset, so she corrected that too.",
-      translation: "第一次测试发现密码重置还有另一个问题，于是她也修复了它。",
-      category: "职场沟通",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 900,
-      text: "reset",
-      meaning: "重置",
+      id: 1317,
+      text: "next",
+      meaning: "下一个的",
       example:
-        "The first run found a different issue in password reset, so she corrected that too.",
-      translation: "第一次测试发现密码重置还有另一个问题，于是她也修复了它。",
-      category: "职场沟通",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 337,
-      text: "release",
-      meaning: "版本",
+      id: 829,
+      text: "details",
+      meaning: "细节",
       example:
-        "After fixing a login problem, the developer did not release the change immediately.",
-      translation: "修复登录问题后，开发人员没有立刻发布改动。",
-      category: "软件开发",
-      partOfSpeech: "verb",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 336,
-      text: "rollback",
-      meaning: "回滚",
+      id: 1346,
+      text: "contact",
+      meaning: "联系人",
       example:
-        "The team then prepared the release and kept a rollback plan ready in case the problem returned in production.",
-      translation: "随后团队准备发布，同时保留回滚计划，以防问题在生产环境再次出现。",
-      category: "软件开发",
-      partOfSpeech: "verb",
+        "The details include the owner, a contact for each question, and what is ready for the next stage.",
+      translation: "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+      category: "Work",
     },
     {
-      id: 901,
-      text: "password reset",
-      meaning: "密码重置",
+      id: 1347,
+      text: "here is",
+      meaning: "这是……",
       example:
-        "The first run found a different issue in password reset, so she corrected that too.",
-      translation: "第一次测试发现密码重置还有另一个问题，于是她也修复了它。",
-      category: "职场沟通",
+        "Leo says, “Here is the summary, I have finished the draft, and we still need to confirm the figures.”",
+      translation: "利奥说：“这是摘要，我已完成初稿，我们仍需确认数字。”",
+      category: "Work",
     },
     {
-      id: 902,
-      text: "rollback plan",
-      meaning: "回滚计划",
-      example:
-        "The team then prepared the release and kept a rollback plan ready in case the problem returned in production.",
-      translation: "随后团队准备发布，同时保留回滚计划，以防问题在生产环境再次出现。",
-      category: "职场沟通",
+      id: 1348,
+      text: "take over",
+      meaning: "接手",
+      example: "Leo asks, “Any questions before you take over the task?”",
+      translation: "利奥问：“你接手这项任务前有什么问题吗？”",
+      category: "Work",
     },
     {
-      id: 903,
-      text: "full test suite",
-      meaning: "完整测试套件",
+      id: 1128,
+      text: "I have finished",
+      meaning: "我已完成",
       example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "职场沟通",
+        "Leo says, “Here is the summary, I have finished the draft, and we still need to confirm the figures.”",
+      translation: "利奥说：“这是摘要，我已完成初稿，我们仍需确认数字。”",
+      category: "Work",
+      usagePattern: "I have finished [task].",
     },
     {
-      id: 904,
-      text: "login problem",
-      meaning: "登录问题",
+      id: 1349,
+      text: "still need to",
+      meaning: "仍需要……",
       example:
-        "After fixing a login problem, the developer did not release the change immediately.",
-      translation: "修复登录问题后，开发人员没有立刻发布改动。",
-      category: "职场沟通",
+        "Leo says, “Here is the summary, I have finished the draft, and we still need to confirm the figures.”",
+      translation: "利奥说：“这是摘要，我已完成初稿，我们仍需确认数字。”",
+      category: "Work",
+      usagePattern: "We still need to [action].",
     },
+    {
+      id: 1133,
+      text: "the next step",
+      meaning: "下一步",
+      example:
+        "His colleague answers, “The next step is clear, and I will get in touch if anything is missing.”",
+      translation: "同事回答：“下一步很清楚，如果缺少什么，我会联系你。”",
+      category: "Work",
+    },
+    {
+      id: 1237,
+      text: "check with",
+      meaning: "和……确认",
+      example:
+        "His colleague replies, “Please tell me what you have done and who I should check with.”",
+      translation: "同事回答：“请告诉我已做了什么，以及我该和谁确认。”",
+      category: "Work",
+    },
+    {
+      id: 1324,
+      text: "any questions",
+      meaning: "有什么问题吗",
+      example: "Leo asks, “Any questions before you take over the task?”",
+      translation: "利奥问：“你接手这项任务前有什么问题吗？”",
+      category: "Work",
+      usagePattern: "Do you have any questions about [topic]?",
+    },
+    {
+      id: 1350,
+      text: "get in touch",
+      meaning: "取得联系",
+      example:
+        "His colleague answers, “The next step is clear, and I will get in touch if anything is missing.”",
+      translation: "同事回答：“下一步很清楚，如果缺少什么，我会联系你。”",
+      category: "Work",
+    },
+    {
+      id: 6,
+      text: "make sure",
+      meaning: "确保",
+      example:
+        "Leo adds, “Please make sure the owner sees the summary, and let me know when it is received.”",
+      translation: "利奥补充：“请确保负责人看到摘要，并在对方收到后告诉我。”",
+      category: "Work",
+    },
+    {
+      id: 100,
+      text: "let me know",
+      meaning: "告诉我",
+      example:
+        "Leo adds, “Please make sure the owner sees the summary, and let me know when it is received.”",
+      translation: "利奥补充：“请确保负责人看到摘要，并在对方收到后告诉我。”",
+      category: "Work",
+    },
+  ],
+  articleVocabularyIds: [
+    778, 1058, 926, 863, 736, 1063, 1064, 1317, 829, 1346, 1347, 1348, 1128, 1349, 1133,
+    1237, 1324, 1350, 6, 100,
+  ],
+  article: {
+    id: 28,
+    title: "A Handover That Helps",
+    topic: "通用职场",
+    level: "实用英语 · 对话与阅读",
+    summary: "围绕“交接工作与确认下一步”练习提问、回应及确认下一步。",
+    paragraphs: [
+      {
+        text: "Leo prepares a document with the status of a task before a colleague takes over. The details include the owner, a contact for each question, and what is ready for the next stage.",
+        translation:
+          "利奥在同事接手前，准备文档说明一项任务的状态。细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+        sentenceTranslations: [
+          "利奥在同事接手前，准备文档说明一项任务的状态。",
+          "细节包括负责人、各问题的联系人，以及下一阶段已准备好的内容。",
+        ],
+      },
+      {
+        text: "Leo asks, “Any questions before you take over the task?” His colleague replies, “Please tell me what you have done and who I should check with.” Leo says, “Here is the summary, I have finished the draft, and we still need to confirm the figures.” His colleague answers, “The next step is clear, and I will get in touch if anything is missing.”",
+        translation:
+          "利奥问：“你接手这项任务前有什么问题吗？”同事回答：“请告诉我已做了什么，以及我该和谁确认。”利奥说：“这是摘要，我已完成初稿，我们仍需确认数字。”同事回答：“下一步很清楚，如果缺少什么，我会联系你。”",
+        sentenceTranslations: [
+          "利奥问：“你接手这项任务前有什么问题吗？”",
+          "同事回答：“请告诉我已做了什么，以及我该和谁确认。”",
+          "利奥说：“这是摘要，我已完成初稿，我们仍需确认数字。”",
+          "同事回答：“下一步很清楚，如果缺少什么，我会联系你。”",
+        ],
+      },
+      {
+        text: "Leo adds, “Please make sure the owner sees the summary, and let me know when it is received.” The colleague must confirm the figures before sending the final document.",
+        translation:
+          "利奥补充：“请确保负责人看到摘要，并在对方收到后告诉我。”同事必须先确认数字，再发送最终文档。",
+        sentenceTranslations: [
+          "利奥补充：“请确保负责人看到摘要，并在对方收到后告诉我。”",
+          "同事必须先确认数字，再发送最终文档。",
+        ],
+      },
+    ],
+    questions: [
+      {
+        prompt: "What are the speakers mainly trying to do?",
+        options: [
+          "Share an experience and invite a follow-up conversation.",
+          "Confirm responsibilities and close a work discussion clearly.",
+          "Hand over a task and confirm what remains to be done.",
+        ],
+        answer: 2,
+        explanation: "双方围绕“交接工作与确认下一步”交流，并确认具体安排。",
+      },
+      {
+        prompt: "Which statement matches the agreed next step or result?",
+        options: [
+          "Leo will send the summary to the owner by Friday.",
+          "The colleague must confirm the figures before sending the final document.",
+          "The friend is interested in trying a stay with a local family.",
+        ],
+        answer: 1,
+        explanation: "同事必须先确认数字，再发送最终文档。",
+      },
+      {
+        prompt:
+          "Which line is useful when you want to invite questions before handing over a task?",
+        options: [
+          "Any questions before you take over the task?",
+          "Have you ever tried staying with a local family, and what was it like?",
+          "Just to confirm, what happens next and who will take care of the summary?",
+        ],
+        answer: 0,
+        explanation: "利奥问：“你接手这项任务前有什么问题吗？”",
+      },
+    ],
+    gap: {
+      sentence:
+        "Leo says, “______ the summary, I have finished the draft, and we still need to confirm the figures.”",
+      answer: "Here is",
+      hint: "这是……",
+    },
+  },
+  grammarBlank: "have",
+  grammar: {
+    id: 1028,
+    title: "现在完成时：交接已完成工作",
+    explanation: "用 I have finished 说明交接时已经完成的部分。",
+    example:
+      "Leo says, “Here is the summary, I have finished the draft, and we still need to confirm the figures.”",
+    wrong: "I have finishing the draft.",
+    correct: "I have finished the draft.",
+    note: "用 I have finished 说明交接时已经完成的部分。",
+  },
+  vocabularyGroups: [
+    {
+      title: "场景与需求",
+      vocabularyIds: [778, 1058, 926, 863, 736, 1347, 1348, 1128, 1349, 1133],
+    },
+    {
+      title: "回应与下一步",
+      vocabularyIds: [1063, 1064, 1317, 829, 1346, 1237, 1324, 1350, 6, 100],
+    },
+  ],
+  dialogue: [
+    {
+      speaker: "A",
+      text: "Any questions before you take over the task?",
+      translation: "你接手这项任务前有什么问题吗？",
+    },
+    {
+      speaker: "B",
+      text: "Please tell me what you have done and who I should check with.",
+      translation: "请告诉我已做了什么，以及我该和谁确认。",
+    },
+    {
+      speaker: "A",
+      text: "Here is the summary, I have finished the draft, and we still need to confirm the figures.",
+      translation: "这是摘要，我已完成初稿，我们仍需确认数字。",
+    },
+    {
+      speaker: "B",
+      text: "The next step is clear, and I will get in touch if anything is missing.",
+      translation: "下一步很清楚，如果缺少什么，我会联系你。",
+    },
+  ],
+  extensionVocabulary: [
     {
       id: 267,
       text: "staging environment",
@@ -150,151 +325,16 @@ export default defineLesson({
         "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
       translation:
         "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "软件开发",
-      partOfSpeech: "noun",
+      category: "Work",
     },
     {
-      id: 160,
-      text: "test suite",
-      meaning: "测试套件",
+      id: 902,
+      text: "rollback plan",
+      meaning: "回滚计划",
       example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 164,
-      text: "test case",
-      meaning: "测试用例",
-      example:
-        "She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-      translation:
-        "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 268,
-      text: "production environment",
-      meaning: "生产环境",
-      example:
-        "Before calling the fix production-ready, they had to prepare a rollback plan for the production environment.",
-      translation: "在认定修复可以上线之前，他们必须为生产环境准备回滚计划。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 423,
-      text: "production-ready",
-      meaning: "可用于生产环境的",
-      example:
-        "Before calling the fix production-ready, they had to prepare a rollback plan for the production environment.",
-      translation: "在认定修复可以上线之前，他们必须为生产环境准备回滚计划。",
-      category: "软件开发",
-      partOfSpeech: "adj",
-    },
-    {
-      id: 621,
-      text: "prepare a rollback plan",
-      meaning: "准备回滚计划",
-      example:
-        "Before calling the fix production-ready, they had to prepare a rollback plan for the production environment.",
-      translation: "在认定修复可以上线之前，他们必须为生产环境准备回滚计划。",
-      category: "软件开发",
-      partOfSpeech: "phrase",
+        "The team then prepared the release and kept a rollback plan ready in case the problem returned in production.",
+      translation: "随后团队准备发布，同时保留回滚计划，以防问题在生产环境再次出现。",
+      category: "Work",
     },
   ],
-  articleVocabularyIds: [
-    896, 877, 178, 897, 898, 167, 899, 900, 337, 336, 901, 902, 903, 904, 267, 160, 164,
-    268, 423, 621,
-  ],
-  article: {
-    id: 28,
-    title: "Testing a Fix Before Release",
-    topic: "软件开发",
-    level: "中级 · 约 2 分钟",
-    summary:
-      "围绕“测试修复并准备发布”阅读完整情境，在文章中复习当天全部词汇，并练习after + -ing：说明先后顺序。",
-    paragraphs: [
-      {
-        text: "After fixing a login problem, the developer did not release the change immediately. She added a test case for the situation that had caused the failure and ran the full test suite in a staging environment.",
-        translation:
-          "修复登录问题后，开发人员没有立刻发布改动。她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-        sentenceTranslations: [
-          "修复登录问题后，开发人员没有立刻发布改动。",
-          "她为导致故障的情况增加了测试用例，并在预发布环境运行了完整的测试套件。",
-        ],
-      },
-      {
-        text: "The first run found a different issue in password reset, so she corrected that too. A teammate reviewed the changes and confirmed that the tests passed. The team then prepared the release and kept a rollback plan ready in case the problem returned in production.",
-        translation:
-          "第一次测试发现密码重置还有另一个问题，于是她也修复了它。一位队友审查改动并确认测试通过。随后团队准备发布，同时保留回滚计划，以防问题在生产环境再次出现。",
-        sentenceTranslations: [
-          "第一次测试发现密码重置还有另一个问题，于是她也修复了它。",
-          "一位队友审查改动并确认测试通过。",
-          "随后团队准备发布，同时保留回滚计划，以防问题在生产环境再次出现。",
-        ],
-      },
-      {
-        text: "After adding a test case for the failure, the developer used a test environment to investigate a memory leak and check CPU usage and disk space. The team chose to test the change in staging and run the test suite in a staging environment with realistic performance limits. Their cloud provider supplied a separate cloud region and availability zone for recovery testing. Before calling the fix production-ready, they had to prepare a rollback plan for the production environment. They would release the change only after confirming that the issue was gone and the release supported rollback.",
-        translation:
-          "为故障添加测试用例后，开发人员使用测试环境排查内存泄漏，并检查 CPU 使用率和磁盘空间。团队选择在预发布环境中测试变更，并在设有真实性能限制的预发布环境中运行测试套件。云服务提供商提供了独立的云区域和可用区，用于恢复测试。在认定修复可以上线之前，他们必须为生产环境准备回滚计划。他们只有在确认问题已消失且该版本支持回滚后，才会发布变更。",
-        sentenceTranslations: [
-          "为故障添加测试用例后，开发人员使用测试环境排查内存泄漏，并检查 CPU 使用率和磁盘空间。",
-          "团队选择在预发布环境中测试变更，并在设有真实性能限制的预发布环境中运行测试套件。",
-          "云服务提供商提供了独立的云区域和可用区，用于恢复测试。",
-          "在认定修复可以上线之前，他们必须为生产环境准备回滚计划。",
-          "他们只有在确认问题已消失且该版本支持回滚后，才会发布变更。",
-        ],
-      },
-    ],
-    questions: [
-      {
-        prompt: "Where did the developer run the test suite?",
-        options: [
-          "In a staging environment.",
-          "Directly on the customer's account.",
-          "Only on the production database.",
-        ],
-        answer: 0,
-        explanation: "The full test suite was run in staging before release.",
-      },
-      {
-        prompt: "Which sentence matches the reading and today's language focus?",
-        options: [
-          "After fix the login problem, she ran the tests.",
-          "After fixing the login problem, she ran the tests.",
-        ],
-        answer: 1,
-        explanation:
-          "after 后接动词 -ing，可以说明一件事完成后发生的下一步。 after 后直接接动作时，动词使用 -ing。 回到文章找出这个句型，再用当天的两个词汇描述“测试修复并准备发布”的情境。",
-      },
-      {
-        prompt: "In this reading, what does “staging environment” mean?",
-        options: ["预发布环境", "云区域", "可用区"],
-        answer: 0,
-        explanation:
-          "结合原句理解：The team chose to test the change in staging and run the test suite in a staging environment with realistic performance limits.（团队选择在预发布环境中测试变更，并在设有真实性能限制的预发布环境中运行测试套件。）",
-      },
-    ],
-    gap: {
-      sentence:
-        "The team chose to test the change in staging and run the test suite in a ______ with realistic performance limits.",
-      answer: "staging environment",
-      hint: "提示：预发布环境",
-    },
-  },
-  grammarBlank: "fixing",
-  grammar: {
-    id: 1028,
-    title: "after + -ing：说明先后顺序",
-    explanation: "after 后接动词 -ing，可以说明一件事完成后发生的下一步。",
-    example:
-      "After fixing a login problem, the developer did not release the change immediately.",
-    wrong: "After fix the login problem, she ran the tests.",
-    correct: "After fixing the login problem, she ran the tests.",
-    note: "after 后直接接动作时，动词使用 -ing。 回到文章找出这个句型，再用当天的两个词汇描述“测试修复并准备发布”的情境。",
-  },
 });

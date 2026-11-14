@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount, watch } from "vue";
 const props = defineProps<{
+  kind?: "gap" | "choice";
   sentence: string;
   reference: string;
   answer: string;
@@ -29,9 +30,13 @@ function reset() {
   error.value = "";
   pending.value = false;
 }
-watch(() => [props.sentence, props.reference, props.answer, props.focus], reset, {
-  flush: "sync",
-});
+watch(
+  () => [props.sentence, props.reference, props.answer, props.focus, props.kind],
+  reset,
+  {
+    flush: "sync",
+  },
+);
 onBeforeUnmount(reset);
 async function explain() {
   if (pending.value || !props.answer.trim()) return;
@@ -73,12 +78,14 @@ async function explain() {
       variant="tonal"
       color="primary"
       :loading="pending"
-      :disabled="!answer.trim() || answer.length > 180"
+      :disabled="!answer.trim() || answer.length > (kind === 'choice' ? 1200 : 180)"
       @click="explain"
-      >{{ error ? "重试 AI 解析" : "AI 解析我的用词" }}</v-btn
+      >{{
+        error ? "重试 AI 解析" : kind === "choice" ? "AI 解析本题" : "AI 解析我的用词"
+      }}</v-btn
     >
     <div v-if="!feedback" class="text-caption muted mt-1">
-      点击后将本题、参考答案和你的填词发送至配置的 AI 服务。
+      点击后将本题、参考答案、你的作答及相关语境发送至配置的 AI 服务。
     </div>
     <p v-if="error" role="status" class="text-body-2 mt-2">{{ error }}</p>
     <v-alert
@@ -87,10 +94,13 @@ async function explain() {
       density="compact"
       variant="tonal"
       :type="feedback.verdict === 'natural' ? 'success' : 'info'"
-      ><strong>AI 解析 · {{ labels[feedback.verdict] }}</strong>
+      ><strong
+        >AI 解析 ·
+        {{ kind === "choice" ? "选项与原文依据" : labels[feedback.verdict] }}</strong
+      >
       <p>{{ feedback.reason }}</p>
       <p>
-        建议填入 <b>{{ feedback.suggestion }}</b>
+        {{ kind === "choice" ? "参考选项" : "建议填入" }} <b>{{ feedback.suggestion }}</b>
       </p>
       <p lang="en">{{ feedback.completed }}</p></v-alert
     >

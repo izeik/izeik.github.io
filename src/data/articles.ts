@@ -704,7 +704,7 @@ export const articles: ReadingArticle[] = [...rows, ...additionalRows].map(
       id: index + 1,
       title,
       topic,
-      level: "中级 · 约 2 分钟",
+      level: "中级 · 情境阅读",
       summary: "练习理解重点、跟读语流，并用完整句子表达文章中的信息。",
       paragraphs: [
         {

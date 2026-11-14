@@ -1,46 +1,86 @@
 import type { DailyLesson } from "./lessons";
 import { splitEnglishSentences } from "./articles";
 
+export function normalizeGapAnswer(answer: string) {
+  return answer.trim().toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, " ");
+}
+
+function literalPattern(text: string) {
+  return new RegExp(
+    "(?<![a-z])" + text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-z])",
+    "gi",
+  );
+}
+
+/** Use actual lesson sentences; retry invalid candidates rather than losing a question. */
 export function lessonGaps(lesson: DailyLesson) {
-  const singles = lesson.vocabulary.filter((w) => !w.text.includes(" "));
-  const phrases = lesson.vocabulary.filter((w) => w.text.includes(" "));
   const used = new Set<string>();
+  const usedQuestions = new Set([
+    lesson.grammar.example.replace(literalPattern(lesson.grammarBlank), "______"),
+  ]);
   const wordGaps = [];
-  for (const [words, count] of [
-    [singles, 3],
-    [phrases, 2],
+  for (const [phrase, count] of [
+    [false, 3],
+    [true, 2],
   ] as const) {
-    const remaining = [...words];
-    for (let selected = 0; selected < count && remaining.length; selected++) {
-      const fresh = remaining.findIndex((w) => !used.has(w.example));
-      const [w] = remaining.splice(Math.max(fresh, 0), 1);
-      const literal = w.text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const pos = w.example.search(new RegExp("(?<![a-z])" + literal + "(?![a-z])", "i"));
-      if (pos < 0) continue;
-      const answer = w.example.slice(pos, pos + w.text.length);
+    const candidates = lesson.vocabulary.filter(
+      (word) => word.text.includes(" ") === phrase,
+    );
+    let selected = 0;
+    while (candidates.length && selected < count) {
+      const fresh = candidates.findIndex((word) => !used.has(word.example));
+      const word = candidates.splice(Math.max(fresh, 0), 1)[0]!;
+      const matches = [...word.example.matchAll(literalPattern(word.text))];
+      // A second occurrence would reveal the answer in the question.
+      if (matches.length !== 1) continue;
+      const match = matches[0]!;
+      const sentence =
+        word.example.slice(0, match.index) +
+        "______" +
+        word.example.slice(match.index + match[0].length);
+      if (usedQuestions.has(sentence)) continue;
       wordGaps.push({
-        type: words === singles ? "词汇" : "搭配",
-        sentence:
-          w.example.slice(0, pos) + "______" + w.example.slice(pos + answer.length),
-        answer,
-        hint: w.meaning,
-        explanation: w.translation,
+        type: phrase ? "搭配" : "词汇",
+        sentence,
+        answer: match[0],
+        hint: word.meaning,
+        explanation: word.translation,
       });
-      used.add(w.example);
+      used.add(word.example);
+      usedQuestions.add(sentence);
+      selected++;
     }
   }
-  const g = lesson.grammar;
-  const p = lesson.article.paragraphs.find((p) => p.text.includes(g.example));
+  const grammar = lesson.grammar;
+  const matches = [...grammar.example.matchAll(literalPattern(lesson.grammarBlank))];
+  if (matches.length !== 1) {
+    throw new Error(`Lesson ${lesson.day} needs one unambiguous grammar blank.`);
+  }
+  const match = matches[0]!;
+  const paragraph = lesson.article.paragraphs.find((item) =>
+    item.text.includes(grammar.example),
+  );
   const translation =
-    p?.sentenceTranslations[splitEnglishSentences(p.text).indexOf(g.example)];
-  return [
+    paragraph?.sentenceTranslations[
+      splitEnglishSentences(paragraph.text).indexOf(grammar.example)
+    ];
+  const gaps = [
     ...wordGaps,
     {
       type: "语法",
-      sentence: g.example.replace(lesson.grammarBlank, "______"),
-      answer: lesson.grammarBlank,
-      hint: g.title,
-      explanation: g.explanation + " " + (translation ?? g.note),
+      sentence:
+        grammar.example.slice(0, match.index) +
+        "______" +
+        grammar.example.slice(match.index + match[0].length),
+      answer: match[0],
+      hint: grammar.title,
+      explanation: grammar.explanation + " " + (translation ?? grammar.note),
     },
   ];
+  if (gaps.length < 6) {
+    throw new Error(
+      `Lesson ${lesson.day} needs 3 word, 2 phrase, and 1 grammar exercises.`,
+    );
+  }
+  return gaps;
 }

@@ -2,301 +2,334 @@ import { defineLesson } from "./shared";
 
 export default defineLesson({
   day: 12,
-  theme: "给出有效反馈",
+  theme: "说明困难与提出求助",
+  conversationGoal: "Explain a difficulty and request specific help.",
+  context: "work",
   vocabularyIds: [
-    745, 746, 747, 748, 749, 750, 751, 598, 752, 167, 753, 754, 755, 756, 430, 431, 433,
-    434, 435, 436,
+    1123, 1058, 1061, 1057, 854, 1062, 814, 1210, 811, 1211, 1212, 1213, 61, 1214, 1215,
+    1133, 1216, 1217, 1073, 100,
   ],
   vocabulary: [
     {
-      id: 745,
-      text: "presentation",
-      meaning: "演示",
-      example: "Marcus wanted to tell a teammate that a presentation was hard to follow.",
-      translation: "马库斯想告诉一位队友，演示内容不太容易理解。",
-      category: "职场沟通",
-    },
-    {
-      id: 746,
-      text: "recommendation",
-      meaning: "建议",
-      example:
-        "Instead of saying, “This is confusing,” he described the specific issue: the main recommendation appeared near the end, after many details.",
-      translation:
-        "他没有只说“这很 confusing”，而是指出了具体问题：主要建议放在许多细节之后，直到演示快结束时才出现。",
-      category: "职场沟通",
-    },
-    {
-      id: 747,
-      text: "slide",
-      meaning: "幻灯片",
-      example:
-        "He suggested moving the recommendation to the first slide and using the later slides for evidence.",
-      translation: "他建议把建议移到第一页，再用后面的页面展示证据。",
-      category: "职场沟通",
-    },
-    {
-      id: 748,
-      text: "evidence",
-      meaning: "证据",
-      example:
-        "He suggested moving the recommendation to the first slide and using the later slides for evidence.",
-      translation: "他建议把建议移到第一页，再用后面的页面展示证据。",
-      category: "职场沟通",
-    },
-    {
-      id: 749,
-      text: "audience",
-      meaning: "听众",
-      example:
-        "His teammate tried the change, and the audience understood the proposal more quickly.",
-      translation: "队友尝试了这个改动，听众更快理解了提案。",
-      category: "职场沟通",
-    },
-    {
-      id: 750,
-      text: "proposal",
-      meaning: "提案",
-      example:
-        "His teammate tried the change, and the audience understood the proposal more quickly.",
-      translation: "队友尝试了这个改动，听众更快理解了提案。",
-      category: "职场沟通",
-    },
-    {
-      id: 751,
-      text: "feedback",
-      meaning: "反馈",
-      example:
-        "Marcus learned that useful feedback names an observable problem and offers a practical next step.",
-      translation:
-        "马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
-      category: "职场沟通",
-    },
-    {
-      id: 598,
-      text: "observable",
-      meaning: "可观察的",
-      example:
-        "Marcus learned that useful feedback names an observable problem and offers a practical next step.",
-      translation:
-        "马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
-      category: "软件开发",
-      partOfSpeech: "adj",
-    },
-    {
-      id: 752,
-      text: "specific",
-      meaning: "具体的",
-      example:
-        "Instead of saying, “This is confusing,” he described the specific issue: the main recommendation appeared near the end, after many details.",
-      translation:
-        "他没有只说“这很 confusing”，而是指出了具体问题：主要建议放在许多细节之后，直到演示快结束时才出现。",
-      category: "职场沟通",
-    },
-    {
-      id: 167,
-      text: "issue",
+      id: 1123,
+      text: "problem",
       meaning: "问题",
       example:
-        "Instead of saying, “This is confusing,” he described the specific issue: the main recommendation appeared near the end, after many details.",
-      translation:
-        "他没有只说“这很 confusing”，而是指出了具体问题：主要建议放在许多细节之后，直到演示快结束时才出现。",
-      category: "软件开发",
-      partOfSpeech: "noun",
+        "He has tried the first step but wants a clear example before he asks for help with the problem.",
+      translation: "他试过第一步，但想先有个清楚的示例，再就问题求助。",
+      category: "Work",
     },
     {
-      id: 753,
-      text: "first slide",
-      meaning: "第一张幻灯片",
+      id: 1058,
+      text: "task",
+      meaning: "任务",
       example:
-        "He suggested moving the recommendation to the first slide and using the later slides for evidence.",
-      translation: "他建议把建议移到第一页，再用后面的页面展示证据。",
-      category: "职场沟通",
+        "Leo is stuck on a task and wants to try again because some information is missing.",
+      translation: "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+      category: "Work",
     },
     {
-      id: 754,
-      text: "next step",
+      id: 1061,
+      text: "step",
+      meaning: "步骤",
+      example:
+        "He has tried the first step but wants a clear example before he asks for help with the problem.",
+      translation: "他试过第一步，但想先有个清楚的示例，再就问题求助。",
+      category: "Work",
+    },
+    {
+      id: 1057,
+      text: "help",
+      meaning: "帮助",
+      example:
+        "He has tried the first step but wants a clear example before he asks for help with the problem.",
+      translation: "他试过第一步，但想先有个清楚的示例，再就问题求助。",
+      category: "Work",
+    },
+    {
+      id: 854,
+      text: "example",
+      meaning: "示例",
+      example:
+        "He has tried the first step but wants a clear example before he asks for help with the problem.",
+      translation: "他试过第一步，但想先有个清楚的示例，再就问题求助。",
+      category: "Work",
+    },
+    {
+      id: 1062,
+      text: "clear",
+      meaning: "清楚的",
+      example:
+        "He has tried the first step but wants a clear example before he asks for help with the problem.",
+      translation: "他试过第一步，但想先有个清楚的示例，再就问题求助。",
+      category: "Work",
+    },
+    {
+      id: 814,
+      text: "stuck",
+      meaning: "卡住的",
+      example:
+        "Leo is stuck on a task and wants to try again because some information is missing.",
+      translation: "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+      category: "Work",
+    },
+    {
+      id: 1210,
+      text: "try",
+      meaning: "尝试",
+      example:
+        "Leo is stuck on a task and wants to try again because some information is missing.",
+      translation: "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+      category: "Work",
+    },
+    {
+      id: 811,
+      text: "missing",
+      meaning: "缺少的",
+      example:
+        "Leo is stuck on a task and wants to try again because some information is missing.",
+      translation: "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+      category: "Work",
+    },
+    {
+      id: 1211,
+      text: "information",
+      meaning: "信息",
+      example:
+        "Leo is stuck on a task and wants to try again because some information is missing.",
+      translation: "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+      category: "Work",
+    },
+    {
+      id: 1212,
+      text: "I am having trouble",
+      meaning: "我遇到了困难",
+      example: "Leo asks, “I am having trouble with the task, could you take a look?”",
+      translation: "利奥问：“我在这项任务上遇到了困难，你能看一下吗？”",
+      category: "Work",
+      usagePattern: "I am having trouble with [task].",
+    },
+    {
+      id: 1213,
+      text: "could you take a look",
+      meaning: "你能看一下吗",
+      example: "Leo asks, “I am having trouble with the task, could you take a look?”",
+      translation: "利奥问：“我在这项任务上遇到了困难，你能看一下吗？”",
+      category: "Work",
+    },
+    {
+      id: 61,
+      text: "so far",
+      meaning: "到目前为止",
+      example:
+        "His colleague replies, “Tell me what you have done so far, then we can check the next step together.”",
+      translation: "同事回答：“告诉我到目前为止做了什么，然后我们一起确认下一步。”",
+      category: "Work",
+    },
+    {
+      id: 1214,
+      text: "I have tried",
+      meaning: "我尝试过",
+      example:
+        "Leo says, “I have tried the first step, but I am not sure how to continue, so what should I do?”",
+      translation: "利奥说：“我尝试过第一步，但不确定如何继续，我该怎么做？”",
+      category: "Work",
+    },
+    {
+      id: 1215,
+      text: "not sure how",
+      meaning: "不确定怎样",
+      example:
+        "Leo says, “I have tried the first step, but I am not sure how to continue, so what should I do?”",
+      translation: "利奥说：“我尝试过第一步，但不确定如何继续，我该怎么做？”",
+      category: "Work",
+    },
+    {
+      id: 1133,
+      text: "the next step",
       meaning: "下一步",
       example:
-        "Marcus learned that useful feedback names an observable problem and offers a practical next step.",
-      translation:
-        "马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
-      category: "职场沟通",
+        "His colleague replies, “Tell me what you have done so far, then we can check the next step together.”",
+      translation: "同事回答：“告诉我到目前为止做了什么，然后我们一起确认下一步。”",
+      category: "Work",
     },
     {
-      id: 755,
-      text: "more quickly",
-      meaning: "更快地",
+      id: 1216,
+      text: "what should I do",
+      meaning: "我应该怎么做",
       example:
-        "His teammate tried the change, and the audience understood the proposal more quickly.",
-      translation: "队友尝试了这个改动，听众更快理解了提案。",
-      category: "职场沟通",
+        "Leo says, “I have tried the first step, but I am not sure how to continue, so what should I do?”",
+      translation: "利奥说：“我尝试过第一步，但不确定如何继续，我该怎么做？”",
+      category: "Work",
+      usagePattern: "What should I do next?",
     },
     {
-      id: 756,
-      text: "useful feedback",
-      meaning: "有用的反馈",
+      id: 1217,
+      text: "give me an example",
+      meaning: "给我一个例子",
       example:
-        "Marcus learned that useful feedback names an observable problem and offers a practical next step.",
-      translation:
-        "马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
-      category: "职场沟通",
+        "Leo says, “Please give me an example of a clear request, and thanks for your help.”",
+      translation: "利奥说：“请给我一个明确提出请求的例子，谢谢你的帮助。”",
+      category: "Work",
+      usagePattern: "Could you give me an example of [topic]?",
     },
     {
-      id: 430,
-      text: "make a trade-off",
-      meaning: "做出权衡",
+      id: 1073,
+      text: "thanks for your help",
+      meaning: "谢谢你的帮助",
       example:
-        "The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to make a trade-off.",
-      translation:
-        "最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
+        "Leo says, “Please give me an example of a clear request, and thanks for your help.”",
+      translation: "利奥说：“请给我一个明确提出请求的例子，谢谢你的帮助。”",
+      category: "Work",
     },
     {
-      id: 431,
-      text: "set expectations",
-      meaning: "设定预期",
+      id: 100,
+      text: "let me know",
+      meaning: "告诉我",
       example:
-        "He suggested a clearer opening to share the context, set expectations, and provide an update more quickly.",
-      translation: "他建议用更清晰的开场，更快地说明背景、设定预期并提供进展更新。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 433,
-      text: "provide an update",
-      meaning: "提供进展更新",
-      example:
-        "He suggested a clearer opening to share the context, set expectations, and provide an update more quickly.",
-      translation: "他建议用更清晰的开场，更快地说明背景、设定预期并提供进展更新。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 434,
-      text: "share the context",
-      meaning: "说明背景",
-      example:
-        "He suggested a clearer opening to share the context, set expectations, and provide an update more quickly.",
-      translation: "他建议用更清晰的开场，更快地说明背景、设定预期并提供进展更新。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 435,
-      text: "get aligned",
-      meaning: "达成一致",
-      example:
-        "The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to make a trade-off.",
-      translation:
-        "最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
-    },
-    {
-      id: 436,
-      text: "be on the same page",
-      meaning: "理解一致",
-      example:
-        "The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to make a trade-off.",
-      translation:
-        "最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。",
-      category: "职场沟通",
-      partOfSpeech: "phrase",
+        "His colleague answers, “Ask the owner for the missing information, then let me know if you need me to give you an example.”",
+      translation: "同事回答：“先向负责人询问缺少的信息；如果还需要示例，再告诉我。”",
+      category: "Work",
     },
   ],
   articleVocabularyIds: [
-    745, 746, 747, 748, 749, 750, 751, 598, 752, 167, 753, 754, 755, 756, 430, 431, 433,
-    434, 435, 436,
+    1123, 1058, 1061, 1057, 854, 1062, 814, 1210, 811, 1211, 1212, 1213, 61, 1214, 1215,
+    1133, 1216, 1217, 1073, 100,
   ],
   article: {
     id: 12,
-    title: "Giving Useful Feedback",
-    topic: "职场沟通",
-    level: "中级 · 约 3 分钟",
-    summary:
-      "围绕“给出有效反馈”阅读完整情境，在文章中复习当天全部词汇，并练习比较级：让建议更清楚。",
+    title: "Asking Before You Get Stuck",
+    topic: "通用职场",
+    level: "实用英语 · 对话与阅读",
+    summary: "围绕“说明困难与提出求助”练习提问、回应及确认下一步。",
     paragraphs: [
       {
-        text: "Marcus wanted to tell a teammate that a presentation was hard to follow. Instead of saying, “This is confusing,” he described the specific issue: the main recommendation appeared near the end, after many details.",
+        text: "Leo is stuck on a task and wants to try again because some information is missing. He has tried the first step but wants a clear example before he asks for help with the problem.",
         translation:
-          "马库斯想告诉一位队友，演示内容不太容易理解。他没有只说“这很 confusing”，而是指出了具体问题：主要建议放在许多细节之后，直到演示快结束时才出现。",
+          "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。他试过第一步，但想先有个清楚的示例，再就问题求助。",
         sentenceTranslations: [
-          "马库斯想告诉一位队友，演示内容不太容易理解。",
-          "他没有只说“这很 confusing”，而是指出了具体问题：主要建议放在许多细节之后，直到演示快结束时才出现。",
+          "利奥在一项任务上卡住了，想再试一次，因为有些信息缺失。",
+          "他试过第一步，但想先有个清楚的示例，再就问题求助。",
         ],
       },
       {
-        text: "He suggested moving the recommendation to the first slide and using the later slides for evidence. His teammate tried the change, and the audience understood the proposal more quickly. Marcus learned that useful feedback names an observable problem and offers a practical next step.",
+        text: "Leo asks, “I am having trouble with the task, could you take a look?” His colleague replies, “Tell me what you have done so far, then we can check the next step together.” Leo says, “I have tried the first step, but I am not sure how to continue, so what should I do?” His colleague answers, “Ask the owner for the missing information, then let me know if you need me to give you an example.”",
         translation:
-          "他建议把建议移到第一页，再用后面的页面展示证据。队友尝试了这个改动，听众更快理解了提案。马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
+          "利奥问：“我在这项任务上遇到了困难，你能看一下吗？”同事回答：“告诉我到目前为止做了什么，然后我们一起确认下一步。”利奥说：“我尝试过第一步，但不确定如何继续，我该怎么做？”同事回答：“先向负责人询问缺少的信息；如果还需要示例，再告诉我。”",
         sentenceTranslations: [
-          "他建议把建议移到第一页，再用后面的页面展示证据。",
-          "队友尝试了这个改动，听众更快理解了提案。",
-          "马库斯认识到，有用的反馈会指出可观察到的问题，并给出实际的下一步建议。",
+          "利奥问：“我在这项任务上遇到了困难，你能看一下吗？”",
+          "同事回答：“告诉我到目前为止做了什么，然后我们一起确认下一步。”",
+          "利奥说：“我尝试过第一步，但不确定如何继续，我该怎么做？”",
+          "同事回答：“先向负责人询问缺少的信息；如果还需要示例，再告诉我。”",
         ],
       },
       {
-        text: "Marcus asked his teammate to take a look at one observable issue: the slide did not explain why the deadline was time-sensitive. He suggested a clearer opening to share the context, set expectations, and provide an update more quickly. The speaker could then raise a concern, flag a risk, and explain how extra help could buy us some time. The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to make a trade-off. It compared three choices: reduce scope to meet a deadline, push back the date, or risk having to miss a deadline. Marcus recommended naming an owner to document the decision, notify the stakeholders, and hand the task over after the presentation.",
+        text: "Leo says, “Please give me an example of a clear request, and thanks for your help.” The next step is to ask the owner for the missing information.",
         translation:
-          "马库斯请同事看一个可观察到的问题：幻灯片没有解释为什么截止日期如此紧迫。他建议用更清晰的开场，更快地说明背景、设定预期并提供进展更新。演讲者随后可以提出顾虑、提示风险，并解释额外帮助如何为我们争取时间。最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。它比较了三个选择：缩小范围以赶上截止日期、推迟日期，或冒着不得不错过截止日期的风险。马库斯建议指定一名负责人，在演讲后记录决定、通知相关方并移交任务。",
+          "利奥说：“请给我一个明确提出请求的例子，谢谢你的帮助。”下一步是向负责人询问缺少的信息。",
         sentenceTranslations: [
-          "马库斯请同事看一个可观察到的问题：幻灯片没有解释为什么截止日期如此紧迫。",
-          "他建议用更清晰的开场，更快地说明背景、设定预期并提供进展更新。",
-          "演讲者随后可以提出顾虑、提示风险，并解释额外帮助如何为我们争取时间。",
-          "最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。",
-          "它比较了三个选择：缩小范围以赶上截止日期、推迟日期，或冒着不得不错过截止日期的风险。",
-          "马库斯建议指定一名负责人，在演讲后记录决定、通知相关方并移交任务。",
+          "利奥说：“请给我一个明确提出请求的例子，谢谢你的帮助。”",
+          "下一步是向负责人询问缺少的信息。",
         ],
       },
     ],
     questions: [
       {
-        prompt: "What made Marcus's feedback useful?",
+        prompt: "What are the speakers mainly trying to do?",
         options: [
-          "It identified a specific issue and suggested a change.",
-          "It focused on the teammate's personality.",
-          "It avoided giving any example.",
+          "Explain a difficulty and request specific help.",
+          "Talk about recent experiences and ask follow-up questions.",
+          "Agree on responsibilities and offer practical support.",
         ],
         answer: 0,
-        explanation:
-          "He described the issue clearly and proposed a practical adjustment.",
+        explanation: "双方围绕“说明困难与提出求助”交流，并确认具体安排。",
       },
       {
-        prompt: "Which sentence matches the reading and today's language focus?",
+        prompt: "Which statement matches the agreed next step or result?",
         options: [
-          "The audience understood the proposal more quick.",
-          "The audience understood the proposal more quickly.",
+          "They agree to share photos from the lake later.",
+          "Sam is responsible for checking the guest names.",
+          "The next step is to ask the owner for the missing information.",
+        ],
+        answer: 2,
+        explanation: "下一步是向负责人询问缺少的信息。",
+      },
+      {
+        prompt:
+          "Which line is useful when you want to explain a problem and ask someone to look at it?",
+        options: [
+          "Who will take care of the guest list, and would you mind checking the names?",
+          "I am having trouble with the task, could you take a look?",
+          "How was your weekend, and was it relaxing?",
         ],
         answer: 1,
-        explanation:
-          "比较两种做法时，用 -er 或 more + 形容词/副词；副词修饰动作。 quickly 是副词，比较级用 more quickly。 回到文章找出这个句型，再用当天的两个词汇描述“给出有效反馈”的情境。",
-      },
-      {
-        prompt: "In this reading, what does “make a trade-off” mean?",
-        options: ["做出权衡", "移交任务", "看一下"],
-        answer: 0,
-        explanation:
-          "结合原句理解：The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to make a trade-off.（最后一页会帮助大家在必须做出权衡前达成一致、保持相同理解，并就时间安排达成一致。）",
+        explanation: "利奥问：“我在这项任务上遇到了困难，你能看一下吗？”",
       },
     ],
     gap: {
-      sentence:
-        "The final slide would help everyone get aligned, be on the same page, and align on the timeline before they had to ______.",
-      answer: "make a trade-off",
-      hint: "提示：做出权衡",
+      sentence: "Leo asks, “______ with the task, could you take a look?”",
+      answer: "I am having trouble",
+      hint: "我遇到了困难",
     },
   },
-  grammarBlank: "more quickly",
+  grammarBlank: "having",
   grammar: {
     id: 1012,
-    title: "比较级：让建议更清楚",
-    explanation: "比较两种做法时，用 -er 或 more + 形容词/副词；副词修饰动作。",
-    example:
-      "His teammate tried the change, and the audience understood the proposal more quickly.",
-    wrong: "The audience understood the proposal more quick.",
-    correct: "The audience understood the proposal more quickly.",
-    note: "quickly 是副词，比较级用 more quickly。 回到文章找出这个句型，再用当天的两个词汇描述“给出有效反馈”的情境。",
+    title: "be having trouble：说明当前困难",
+    explanation: "I am having trouble with 描述当前遇到困难；am 后的动作使用 -ing。",
+    example: "Leo asks, “I am having trouble with the task, could you take a look?”",
+    wrong: "I am have trouble with the task.",
+    correct: "I am having trouble with the task.",
+    note: "I am having trouble with 描述当前遇到困难；am 后的动作使用 -ing。",
   },
+  vocabularyGroups: [
+    {
+      title: "场景与需求",
+      vocabularyIds: [1123, 1058, 1061, 1057, 854, 1212, 1213, 61, 1214, 1215],
+    },
+    {
+      title: "回应与下一步",
+      vocabularyIds: [1062, 814, 1210, 811, 1211, 1133, 1216, 1217, 1073, 100],
+    },
+  ],
+  dialogue: [
+    {
+      speaker: "A",
+      text: "I am having trouble with the task, could you take a look?",
+      translation: "我在这项任务上遇到了困难，你能看一下吗？",
+    },
+    {
+      speaker: "B",
+      text: "Tell me what you have done so far, then we can check the next step together.",
+      translation: "告诉我到目前为止做了什么，然后我们一起确认下一步。",
+    },
+    {
+      speaker: "A",
+      text: "I have tried the first step, but I am not sure how to continue, so what should I do?",
+      translation: "我尝试过第一步，但不确定如何继续，我该怎么做？",
+    },
+    {
+      speaker: "B",
+      text: "Ask the owner for the missing information, then let me know if you need me to give you an example.",
+      translation: "先向负责人询问缺少的信息；如果还需要示例，再告诉我。",
+    },
+  ],
+  extensionVocabulary: [
+    {
+      id: 514,
+      text: "connection pool",
+      meaning: "连接池",
+      example: "The team later improved the connection pool.",
+      translation: "之后，团队改进了连接池。",
+      category: "Work",
+    },
+    {
+      id: 808,
+      text: "database connections",
+      meaning: "数据库连接",
+      example: "The service was running out of database connections during busy periods.",
+      translation: "繁忙时段服务的数据库连接会耗尽。",
+      category: "Work",
+    },
+  ],
 });

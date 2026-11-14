@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, watch } from "vue";
+import LessonDialogue from "../LessonDialogue.vue";
 import LessonGaps from "../LessonGaps.vue";
+import TransferTask from "../TransferTask.vue";
 import StudySession from "../StudySession.vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 import { monthlyLearningPlan } from "../../data/learningPlan";
@@ -16,6 +18,17 @@ const lesson = computed(
   () => monthlyLearningPlan[store.selectedPlanDay - 1] ?? monthlyLearningPlan[0]!,
 );
 const directMatchCount = computed(() => lesson.value.articleVocabularyIds.length);
+const singleWordCount = computed(
+  () => lesson.value.vocabulary.filter((word) => !word.text.includes(" ")).length,
+);
+const vocabularyGroups = computed(() =>
+  lesson.value.vocabularyGroups.map((group) => ({
+    title: group.title,
+    words: group.vocabularyIds.map((id) =>
+      lesson.value.vocabulary.find((word) => word.id === id)!,
+    ),
+  })),
+);
 
 function selectVocabulary() {
   const selected = lesson.value;
@@ -49,164 +62,304 @@ function openModule(module: "vocabulary" | "reading" | "grammar" | "speaking") {
   if (module === "grammar") selectGrammar();
   page.value = module;
 }
+const masteredInLesson = computed(
+  () => lesson.value.vocabularyIds.filter((id) => store.mastered.includes(id)).length,
+);
+const learningRoutes = [
+  {
+    id: "vocabulary",
+    icon: "mdi-cards-outline",
+    title: "积累核心表达",
+    detail: "20 个单词与搭配",
+    color: "sage",
+  },
+  {
+    id: "reading",
+    icon: "mdi-book-open-page-variant-outline",
+    title: "放进真实语境",
+    detail: "一篇主题阅读",
+    color: "peach",
+  },
+  {
+    id: "grammar",
+    icon: "mdi-puzzle-outline",
+    title: "理解句子的逻辑",
+    detail: "一个语法重点",
+    color: "lavender",
+  },
+  {
+    id: "speaking",
+    icon: "mdi-microphone-outline",
+    title: "说出自己的故事",
+    detail: "把输入变成表达",
+    color: "butter",
+  },
+] as const;
 </script>
 
 <template>
-  <section>
-    <v-card class="gradient-card pa-4 pa-md-5 mb-4">
-      <div class="d-flex flex-wrap justify-space-between align-center ga-5">
-        <div>
-          <div class="text-overline">30-DAY TOPIC LIBRARY</div>
-          <div class="text-h4 font-weight-bold mt-1">自由选择今天想学的内容</div>
-          <div class="mt-2 text-white" style="opacity: 0.88">
-            不用按顺序完成。每一天都包含词汇、文章和语法，你可以从任意一天、任意模块开始。
-          </div>
-        </div>
-        <v-select
-          v-model="store.selectedPlanDay"
-          :items="lessonDayOptions"
-          label="选择学习日"
-          variant="solo"
-          density="comfortable"
-          hide-details
-          class="lesson-day-select"
-          aria-label="选择学习日"
-        />
-      </div>
-    </v-card>
-
-    <LessonGaps :key="lesson.day" :lesson="lesson" />
-    <StudySession @open-module="openModule" />
-    <v-row class="lesson-metrics mb-1">
-      <v-col cols="12" sm="4">
-        <v-card class="pa-4 h-100">
-          <div class="eyebrow">今日练习估算</div>
-          <div class="metric-value mt-2">
-            {{ store.todayMinutes }}<small class="text-body-2 ml-1">分钟</small>
-          </div>
-          <div class="text-caption muted mt-1">按练习操作估算，非实际计时</div>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <v-card class="pa-4 h-100">
-          <div class="eyebrow">当前选择</div>
-          <div class="metric-value mt-2">
-            {{ lesson.day }}<small class="text-body-2 ml-1">/ 30 天</small>
-          </div>
-          <div class="text-caption muted mt-1">{{ lesson.theme }}</div>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <v-card class="pa-4 h-100">
-          <div class="eyebrow">词库积累</div>
-          <div class="metric-value mt-2">
-            {{ store.mastered.length }}<small class="text-body-2 ml-1">已掌握</small>
-          </div>
-          <div class="text-caption muted mt-1">
-            从 {{ expressions.length }} 个表达中复习
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <div class="d-flex flex-wrap justify-space-between align-end ga-2 mt-4 mb-3">
+  <section class="learning-dashboard">
+    <div class="dashboard-heading">
       <div>
-        <div class="text-h6 font-weight-bold">
-          第 {{ lesson.day }} 天 · {{ lesson.theme }}
+        <div class="eyebrow">MAKE ROOM FOR ENGLISH</div>
+        <h1>今天，也进步一点。</h1>
+        <p>从一个表达开始，把英语慢慢变成自己的语言。</p>
+      </div>
+      <v-select
+        v-model="store.selectedPlanDay"
+        :items="lessonDayOptions"
+        label="选择学习日"
+        variant="outlined"
+        density="compact"
+        hide-details
+        class="lesson-day-select"
+        aria-label="选择学习日"
+      />
+    </div>
+
+    <div class="learning-hero">
+      <div class="hero-copy">
+        <span class="hero-tag"
+          ><span></span>30 天主题学习 · DAY
+          {{ String(lesson.day).padStart(2, "0") }}</span
+        >
+        <h2>{{ lesson.theme }}</h2>
+        <p>学会实用的表达，读懂一个故事。<br />今天的每一步，都在为下一次开口做准备。</p>
+        <div class="hero-actions">
+          <v-btn
+            color="secondary"
+            size="large"
+            append-icon="mdi-arrow-right"
+            @click="openModule('vocabulary')"
+            >开始今天的学习</v-btn
+          ><button class="hero-reading" @click="openModule('reading')">
+            <v-icon size="19">mdi-book-open-outline</v-icon>先读一篇文章
+          </button>
         </div>
-        <div class="text-caption muted mt-1">
-          词汇、文章和语法按主题关联。选择任意一项开始。
+        <div class="hero-meta">
+          <span><v-icon size="15">mdi-cards-outline</v-icon>20 个表达</span
+          ><span><v-icon size="15">mdi-form-textbox</v-icon>6 道巩固练习</span
+          ><span>自由选择 · 按自己的节奏</span>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-orbit"></div>
+        <span class="art-spark spark-one">✳</span
+        ><span class="art-spark spark-two">✦</span>
+        <div class="art-card back-card">
+          <span>one word at a time.</span>
+          <div class="book-lines"></div>
+        </div>
+        <div class="art-card front-card">
+          <span class="art-card-label">A LITTLE EVERY DAY</span>
+          <div class="art-letters">Aa<span>↗</span></div>
+          <div class="art-card-bottom">
+            <span>learn. use. repeat.</span><v-icon size="25">mdi-leaf</v-icon>
+          </div>
+        </div>
+        <div class="art-speech">
+          <v-icon size="23">mdi-volume-high</v-icon>
+          <div><b>Hello, world.</b><span>让表达，自然发生。</span></div>
         </div>
       </div>
     </div>
 
-    <v-row>
-      <v-col cols="12">
-        <v-card class="pa-4 pa-md-5 h-100" variant="outlined">
-          <div class="d-flex flex-wrap justify-space-between align-start ga-3">
+    <div class="dashboard-stats">
+      <div class="stat-tile">
+        <span class="stat-icon sage"><v-icon>mdi-notebook-edit-outline</v-icon></span>
+        <div>
+          <span class="stat-label">待巩固题目</span>
+          <div class="stat-number">
+            {{ store.errors.filter((e) => !e.resolved).length }}<small>条待复习</small>
+          </div>
+          <span class="stat-note">从薄弱处开始复习</span>
+        </div>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-icon peach"><v-icon>mdi-sprout-outline</v-icon></span>
+        <div>
+          <span class="stat-label">本课已掌握</span>
+          <div class="stat-number">{{ masteredInLesson }}<small>/ 20 个表达</small></div>
+          <span class="stat-note">每一次回忆都算数</span>
+        </div>
+      </div>
+      <button class="stat-tile stat-link" @click="page = 'statistics'">
+        <span class="stat-icon lavender"
+          ><v-icon>mdi-chart-timeline-variant</v-icon></span
+        >
+        <div>
+          <span class="stat-label">词库积累</span>
+          <div class="stat-number">
+            {{ store.mastered.length }}<small>个已掌握</small>
+          </div>
+          <span class="stat-note">探索 {{ expressions.length }} 个实用表达</span>
+        </div>
+        <v-icon class="stat-arrow" size="18">mdi-arrow-top-right</v-icon>
+      </button>
+    </div>
+
+    <LessonDialogue :key="`dialogue-${lesson.day}`" :lesson="lesson" />
+    <div class="section-heading mt-6">
+      <div>
+        <div class="eyebrow">YOUR LEARNING PATH</div>
+        <h2>本课学习地图</h2>
+      </div>
+      <span class="section-note">理解 → 巩固 → 开口</span>
+    </div>
+    <div class="lesson-layout">
+      <div class="lesson-content">
+        <v-card class="vocabulary-overview content-card">
+          <div class="card-heading">
+            <span class="section-icon sage"><v-icon>mdi-cards-outline</v-icon></span>
             <div>
-              <v-chip size="small" color="primary" variant="tonal">20 个今日表达</v-chip>
-              <div class="text-body-2 mt-3">
-                词组会在所选日课中固定保存；可单独学习或回看。
-              </div>
+              <h3>把词汇串成一个场景</h3>
+              <p>
+                {{ singleWordCount }} 个单词 · {{ 20 - singleWordCount }} 个短语 ·
+                全部关联当日文章
+              </p>
             </div>
-            <v-btn
+            <span class="card-index">01</span>
+          </div>
+          <div
+            v-for="(group, index) in vocabularyGroups"
+            :key="group.title"
+            class="vocabulary-group"
+          >
+            <div class="group-title">
+              <span>0{{ index + 1 }}</span>
+              <h4>{{ group.title }}</h4>
+            </div>
+            <div class="vocabulary-chips">
+              <v-chip
+                v-for="item in group.words"
+                :key="item.id"
+                class="lesson-vocabulary-chip"
+                size="small"
+                variant="tonal"
+                >{{ item.text
+                }}<span class="chip-meaning">{{ item.meaning }}</span></v-chip
+              >
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>先联想，再回忆，最后放进句子里。</span
+            ><v-btn
+              variant="text"
               color="primary"
-              prepend-icon="mdi-book-open-variant"
+              append-icon="mdi-arrow-right"
               @click="openModule('vocabulary')"
-            >
-              学习词汇
-            </v-btn>
-          </div>
-          <div class="d-flex flex-wrap ga-1 mt-4">
-            <v-chip
-              v-for="item in lesson.vocabulary"
-              :key="item.id"
-              size="small"
-              variant="tonal"
-              >{{ item.text }}</v-chip
+              >学习词汇</v-btn
             >
           </div>
         </v-card>
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <v-card class="pa-4 pa-md-5 h-100" variant="outlined">
-          <v-chip size="small" color="info" variant="tonal">关联阅读</v-chip>
-          <div class="text-h6 font-weight-bold mt-3">{{ lesson.article.title }}</div>
-          <div class="text-body-2 mt-1">
-            {{ lesson.article.topic }} · {{ lesson.article.level }}
+        <div class="lesson-pair">
+          <v-card class="content-card reading-preview"
+            ><span class="mini-label"
+              ><v-icon size="17">mdi-book-open-outline</v-icon>READ & DISCOVER</span
+            >
+            <h3>{{ lesson.article.title }}</h3>
+            <p>{{ lesson.article.summary }}</p>
+            <div class="preview-bottom">
+              <span>{{ directMatchCount }} 个表达融入故事</span
+              ><v-btn
+                variant="text"
+                color="primary"
+                icon="mdi-arrow-top-right"
+                aria-label="阅读文章"
+                @click="openModule('reading')"
+              /></div
+          ></v-card>
+          <v-card class="content-card grammar-preview"
+            ><span class="mini-label"
+              ><v-icon size="17">mdi-puzzle-outline</v-icon>NOTICE THE PATTERN</span
+            >
+            <h3>{{ lesson.grammar.title }}</h3>
+            <p class="grammar-example">{{ lesson.grammar.example }}</p>
+            <div class="preview-bottom">
+              <span>读懂句子背后的规律</span
+              ><v-btn
+                variant="text"
+                color="primary"
+                icon="mdi-arrow-top-right"
+                aria-label="练习语法"
+                @click="openModule('grammar')"
+              /></div
+          ></v-card>
+        </div>
+      </div>
+      <aside class="lesson-rail" aria-label="本课学习路线">
+        <v-card class="route-card content-card"
+          ><div class="eyebrow">ONE STEP AT A TIME</div>
+          <h3>跟着路线，轻松开始</h3>
+          <div class="route-list">
+            <button
+              v-for="(route, index) in learningRoutes"
+              :key="route.id"
+              class="route-step"
+              @click="openModule(route.id)"
+            >
+              <span :class="['route-icon', route.color]"
+                ><v-icon size="21">{{ route.icon }}</v-icon></span
+              ><span
+                ><b>{{ route.title }}</b
+                ><small>{{ route.detail }}</small></span
+              ><span class="route-number">{{ String(index + 1).padStart(2, "0") }}</span>
+            </button>
           </div>
-          <div class="text-caption muted mt-3">{{ lesson.article.summary }}</div>
-          <div class="text-caption muted mt-2">
-            <template v-if="directMatchCount">
-              {{ directMatchCount }} 个今日词组直接出现在文章中
-            </template>
-            <template v-else>围绕当日主题的阅读文章</template>
-          </div>
-          <v-btn
-            class="mt-4"
-            color="primary"
-            variant="tonal"
-            prepend-icon="mdi-book-open-page-variant"
-            @click="openModule('reading')"
-          >
-            阅读文章
-          </v-btn>
-        </v-card>
-      </v-col>
+          <div class="lesson-progress">
+            <div>
+              <span>本课词汇掌握</span><b>{{ masteredInLesson }} / 20</b>
+            </div>
+            <v-progress-linear
+              :model-value="masteredInLesson * 5"
+              height="6"
+              rounded
+              color="primary"
+              class="mt-3"
+            /></div
+        ></v-card>
+        <div class="learning-tip">
+          <span class="tip-symbol">✳</span>
+          <div class="eyebrow">A GENTLE REMINDER</div>
+          <h3>不用一次学会所有。</h3>
+          <p>今天记住一个词，明天用出一句话。小小的重复，会带来真正的改变。</p>
+          <span>Enjoy the process.</span>
+        </div>
+      </aside>
+    </div>
 
-      <v-col cols="12" md="6">
-        <v-card class="pa-4 pa-md-5 h-100" variant="outlined">
-          <v-chip size="small" color="deep-purple" variant="tonal">文章语法</v-chip>
-          <div class="text-h6 font-weight-bold mt-3">{{ lesson.grammar.title }}</div>
-          <div class="text-body-2 mt-2">{{ lesson.grammar.explanation }}</div>
-          <div class="text-caption mt-3">
-            <span class="muted">文章例句：</span>
-            <span class="font-italic">{{ lesson.grammar.example }}</span>
-          </div>
-          <v-btn
-            class="mt-4"
-            color="primary"
-            variant="tonal"
-            prepend-icon="mdi-text-box-check-outline"
-            @click="openModule('grammar')"
-          >
-            练习语法
-          </v-btn>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <div class="text-caption muted mt-4">
-      你的学习日选择会自动保存，下次打开可以继续学习。
+    <v-expansion-panels v-if="lesson.extensionVocabulary.length" class="mt-5"
+      ><v-expansion-panel
+        title="可选 · 软件开发与技术支持扩展（不计入本课 20 个核心词条）"
+        ><v-expansion-panel-text
+          ><p class="text-body-2 muted mb-3">
+            适用于相关行业；通用对话可先跳过。原专业词库仍可从完整词库查阅。
+          </p>
+          <div v-for="word in lesson.extensionVocabulary" :key="word.id" class="mb-4">
+            <b>{{ word.text }}</b> · {{ word.meaning }}
+            <p class="text-body-2 mt-2">{{ word.example }}</p>
+          </div></v-expansion-panel-text
+        ></v-expansion-panel
+      ></v-expansion-panels
+    >
+    <div class="section-heading practice-heading">
+      <div>
+        <div class="eyebrow">PUT IT INTO PRACTICE</div>
+        <h2>现在，试着回忆一下</h2>
+      </div>
+      <span class="section-note">不用赶进度，想清楚再回答。</span>
+    </div>
+    <LessonGaps :key="lesson.day" :lesson="lesson" />
+    <TransferTask :key="`transfer-${lesson.day}`" :lesson="lesson" />
+    <v-expansion-panels class="session-wrapper mt-5"
+      ><v-expansion-panel title="按自己的节奏，展开学习步骤"
+        ><v-expansion-panel-text
+          ><StudySession
+            @open-module="openModule" /></v-expansion-panel-text></v-expansion-panel
+    ></v-expansion-panels>
+    <div class="save-note">
+      <v-icon size="15">mdi-content-save-check-outline</v-icon
+      >学习日选择和掌握记录会自动保存在此设备。
     </div>
   </section>
 </template>
-
-<style scoped>
-.lesson-day-select {
-  flex: 1 1 320px;
-  max-width: 420px;
-}
-</style>

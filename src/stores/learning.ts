@@ -1,3 +1,5 @@
+import { COURSE_REVISION } from "../data/courseRevision";
+import { validReviewExercise, type ReviewExercise } from "../data/reviewExercise";
 import { defineStore } from "pinia";
 import { computed, onScopeDispose, ref, watch } from "vue";
 import { expressions, questions } from "../data/content";
@@ -5,6 +7,9 @@ import { articles } from "../data/articles";
 import { dailyLessons } from "../data/lessons";
 
 interface ErrorItem {
+  exercise?: ReviewExercise;
+  resolved?: boolean;
+  resolution?: "review" | "ai";
   id: number;
   wrong: string;
   corrected: string;
@@ -111,7 +116,13 @@ export const useLearningStore = defineStore("learning", () => {
   );
   const minutes = ref(Math.max(count(saved.minutes), recordedMinutes));
   const errors = ref<ErrorItem[]>(
-    Array.isArray(saved.errors) ? saved.errors.filter(isErrorItem) : [],
+    Array.isArray(saved.errors)
+      ? saved.errors.filter(isErrorItem).map((item) => ({
+          ...item,
+          exercise: validReviewExercise(item.exercise) ? item.exercise : undefined,
+          resolved: item.resolved === true,
+        }))
+      : [],
   );
   // Older snapshots used Date.now() as the only ID, including for errors saved in the same millisecond.
   const usedErrorIds = new Set<number>();
@@ -131,14 +142,29 @@ export const useLearningStore = defineStore("learning", () => {
   const speakingIndex = ref(
     numberInRange(saved.speakingIndex, 0, questions.length - 1) ? saved.speakingIndex : 0,
   );
-  const articleCompletions = ref(ids(saved.articleCompletions, articles.length));
+  const previousArticles = ids(saved.articleCompletions, articles.length);
+  const sameCourse = saved.courseRevision === COURSE_REVISION;
+  const legacyArticleCompletions = [
+    ...new Set([
+      ...ids(saved.legacyArticleCompletions, articles.length),
+      ...(!sameCourse ? previousArticles.filter((id) => id <= 30) : []),
+    ]),
+  ];
+  const legacyPlanCompletions =
+    saved.legacyPlanCompletions ??
+    (!sameCourse ? restoreTasks(saved.planCompletions) : {});
+  const articleCompletions = ref(
+    sameCourse ? previousArticles : previousArticles.filter((id) => id > 30),
+  );
   const planStartDate = ref<string | null>(
     isLocalDateKey(saved.planStartDate) ? saved.planStartDate : null,
   );
   const selectedPlanDay = ref(
     numberInRange(saved.selectedPlanDay, 1, 30) ? saved.selectedPlanDay : 1,
   );
-  const planCompletions = ref(restoreTasks(saved.planCompletions));
+  const planCompletions = ref(
+    sameCourse ? restoreTasks(saved.planCompletions) : ({} as Record<string, string[]>),
+  );
   const selectedArticleId = ref(
     numberInRange(saved.selectedArticleId, 1, articles.length)
       ? saved.selectedArticleId
@@ -154,6 +180,9 @@ export const useLearningStore = defineStore("learning", () => {
   }
   watch(
     () => ({
+      courseRevision: COURSE_REVISION,
+      legacyArticleCompletions,
+      legacyPlanCompletions,
       favorites: favorites.value,
       mastered: mastered.value,
       minutes: minutes.value,
@@ -213,11 +242,12 @@ export const useLearningStore = defineStore("learning", () => {
       return total;
     });
   });
+  const activityDays = computed(() => new Set(sessions.value.map((s) => s.date)));
   const streak = computed(() => {
     const date = new Date(`${currentDate.value}T12:00:00`);
-    if (todayMinutes.value === 0) date.setDate(date.getDate() - 1);
+    if (!activityDays.value.has(currentDate.value)) date.setDate(date.getDate() - 1);
     let days = 0;
-    while ((minutesByDay.value.get(localDateKey(date)) ?? 0) > 0) {
+    while (activityDays.value.has(localDateKey(date))) {
       days++;
       date.setDate(date.getDate() - 1);
     }
@@ -243,22 +273,42 @@ export const useLearningStore = defineStore("learning", () => {
   function logSession(duration = 1, learned = 0, mistakes = 0) {
     const day = localDateKey(new Date());
     currentDate.value = day;
-    minutes.value += duration;
+    // Keep the old duration argument for callers; new activity no longer adds minutes.
     const session = sessions.value.find((item) => item.date === day);
     if (session) {
-      session.minutes += duration;
+      // Activity is counted independently of legacy time estimates.
       session.expressions += learned;
       session.mistakes += mistakes;
     } else {
       sessions.value.push({
         date: day,
-        minutes: duration,
+        minutes: 0,
         expressions: learned,
         mistakes,
       });
     }
   }
-  function addError(wrong: string, corrected: string, type: string, note: string) {
+  function addError(
+    wrong: string,
+    corrected: string,
+    type: string,
+    note: string,
+    exercise?: ReviewExercise,
+  ) {
+    const duplicate = errors.value.find(
+      (e) =>
+        e.type === type &&
+        e.corrected === corrected &&
+        (exercise ? e.exercise?.sentence === exercise.sentence : e.note === note),
+    );
+    if (duplicate) {
+      duplicate.wrong = wrong;
+      duplicate.note = note;
+      duplicate.resolved = false;
+      duplicate.date = new Date().toLocaleString("zh-CN");
+      if (exercise) duplicate.exercise = exercise;
+      return;
+    }
     nextErrorId = Math.max(nextErrorId + 1, Date.now());
     errors.value.unshift({
       id: nextErrorId,
@@ -267,7 +317,20 @@ export const useLearningStore = defineStore("learning", () => {
       type,
       note,
       date: new Date().toLocaleString("zh-CN"),
+      exercise,
+      resolved: false,
     });
+  }
+  function resolveError(
+    id: number,
+    correct: boolean,
+    source: "review" | "ai" = "review",
+  ) {
+    const item = errors.value.find((e) => e.id === id);
+    if (item) {
+      item.resolved = correct;
+      item.resolution = source;
+    }
   }
   function removeError(id: number) {
     errors.value = errors.value.filter((item) => item.id !== id);
@@ -319,6 +382,7 @@ export const useLearningStore = defineStore("learning", () => {
     logSession,
     addError,
     removeError,
+    resolveError,
     cycleSpeaking,
     completeArticle,
     startMonthlyPlan,

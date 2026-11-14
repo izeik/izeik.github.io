@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import { computed, inject } from "vue";
 
+import LessonDialogue from "../LessonDialogue.vue";
+import { dailyLessons } from "../../data/lessons";
 import type { TrainerContext } from "../../composables/useTrainer";
 const context = inject<TrainerContext>("trainer")!;
+const currentLesson = computed(() => dailyLessons[context.store.selectedPlanDay - 1]!);
 const {
   dialogue,
   userLine,
@@ -20,6 +23,8 @@ const {
   <section>
     <div class="page-title">在真实场景里练习开口</div>
     <div class="muted mt-1 mb-4">先用自己的话回答，再听一个自然表达示例。</div>
+    <LessonDialogue :key="currentLesson.day" :lesson="currentLesson" class="mb-5" />
+    <h2 class="text-h6 mb-3">更多情景练习</h2>
     <div class="d-flex flex-wrap ga-2 mb-4">
       <v-chip
         v-for="{ label } in allDialogues"

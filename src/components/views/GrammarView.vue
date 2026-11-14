@@ -47,7 +47,7 @@ function logReview() {
   <section>
     <div class="page-title">把语法用进真实表达</div>
     <div class="muted mt-1 mb-4">
-      先完成一个生活或职场表达任务，再换个内容用同一个句型。每次约 3 分钟，不做考试题。
+      先完成一个生活或职场表达任务，再换个内容用同一个句型。不做考试题。
     </div>
     <v-row>
       <v-col cols="12" md="3">

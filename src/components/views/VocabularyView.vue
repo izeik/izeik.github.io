@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from "vue";
+import { useReinforcementStore } from "../../stores/reinforcement";
 import GapFeedback from "../GapFeedback.vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 const {
@@ -13,6 +14,7 @@ const {
   speak,
   nextExpression,
 } = inject<TrainerContext>("trainer")!;
+const reinforcement = useReinforcementStore();
 const recall = ref(false);
 const answer = ref("");
 const result = ref<"correct" | "incorrect" | null>(null);
@@ -47,6 +49,13 @@ function checkAnswer() {
   const word = currentExpression.value;
   const correct = normalize(answer.value) === normalize(word.text);
   result.value = correct ? "correct" : "incorrect";
+  reinforcement.record("词汇回忆", correct);
+  if (!correct)
+    store.addError(answer.value.trim(), word.text, "词汇回忆 · 待复习", word.meaning, {
+      sentence: prompt.value ?? "请根据中文回忆：" + word.meaning,
+      answer: word.text,
+      hint: word.translation,
+    });
   store.logSession(1);
 }
 </script>
@@ -82,7 +91,7 @@ function checkAnswer() {
       density="compact"
       class="mb-4"
     >
-      正在学习今日计划的 {{ store.planVocabularyIds.length }} 个词汇。
+      正在学习本课的 {{ store.planVocabularyIds.length }} 个核心词条。
       <v-btn size="small" variant="text" @click="store.planVocabularyIds = []"
         >返回完整词库</v-btn
       >
@@ -121,6 +130,16 @@ function checkAnswer() {
             {{ recall ? "请说出英文表达" : currentExpression.text }}
           </div>
           <div class="text-body-1 mt-2">{{ currentExpression.meaning }}</div>
+          <v-alert
+            v-if="currentExpression.usagePattern"
+            class="mt-4"
+            variant="tonal"
+            color="primary"
+            density="compact"
+            ><b>换成自己的内容</b>
+            <p class="mt-1" lang="en">{{ currentExpression.usagePattern }}</p>
+            <small>方括号是可替换位置，不是要逐字说出的内容。</small></v-alert
+          >
           <v-divider class="my-5" />
           <div class="eyebrow">EXAMPLE</div>
           <div class="text-body-1 font-weight-medium mt-2">

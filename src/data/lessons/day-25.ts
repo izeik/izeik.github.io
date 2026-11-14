@@ -2,293 +2,314 @@ import { defineLesson } from "./shared";
 
 export default defineLesson({
   day: 25,
-  theme: "团队迭代计划",
+  theme: "推荐选择与说明偏好",
+  conversationGoal: "Compare options and explain personal preferences.",
+  context: "daily",
   vocabularyIds: [
-    868, 869, 308, 870, 862, 792, 193, 145, 871, 872, 873, 874, 875, 876, 320, 1, 3, 4, 5,
-    6,
+    1325, 1142, 646, 1138, 1169, 1239, 1111, 1190, 1326, 1188, 1087, 1327, 1146, 93, 1328,
+    1329, 1330, 1224, 18, 1331,
   ],
   vocabulary: [
     {
-      id: 868,
-      text: "sprint",
-      meaning: "迭代",
-      example:
-        "At the start of a sprint, the product manager shared the team's priorities.",
-      translation: "迭代开始时，产品经理分享了团队的优先事项。",
-      category: "职场沟通",
-    },
-    {
-      id: 869,
-      text: "priorities",
-      meaning: "优先事项",
-      example:
-        "At the start of a sprint, the product manager shared the team's priorities.",
-      translation: "迭代开始时，产品经理分享了团队的优先事项。",
-      category: "职场沟通",
-    },
-    {
-      id: 308,
-      text: "request",
-      meaning: "请求",
-      example: "The developers reviewed each request and discussed its dependencies.",
-      translation: "开发人员审查了各项请求并讨论它们之间的依赖关系。",
-      category: "软件开发",
-      partOfSpeech: "verb",
-    },
-    {
-      id: 870,
-      text: "dependencies",
-      meaning: "依赖关系",
-      example: "The developers reviewed each request and discussed its dependencies.",
-      translation: "开发人员审查了各项请求并讨论它们之间的依赖关系。",
-      category: "职场沟通",
-    },
-    {
-      id: 862,
-      text: "tasks",
-      meaning: "任务",
-      example:
-        "They broke the work down into smaller tasks so everyone could see what needed to happen first.",
-      translation: "他们把工作拆成较小的任务，让大家看清应该先做什么。",
-      category: "职场沟通",
-    },
-    {
-      id: 792,
-      text: "feature",
-      meaning: "功能",
-      example:
-        "One feature depended on a change to the database, so the team planned that work before the user interface update.",
-      translation:
-        "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-      category: "职场沟通",
-    },
-    {
-      id: 193,
-      text: "database",
-      meaning: "数据库",
-      example:
-        "One feature depended on a change to the database, so the team planned that work before the user interface update.",
-      translation:
-        "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 145,
-      text: "interface",
-      meaning: "界面",
-      example:
-        "One feature depended on a change to the database, so the team planned that work before the user interface update.",
-      translation:
-        "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-      category: "软件开发",
-      partOfSpeech: "noun",
-    },
-    {
-      id: 871,
-      text: "testing",
-      meaning: "测试",
-      example: "They also left time for testing.",
-      translation: "他们还留出了测试时间。",
-      category: "职场沟通",
-    },
-    {
-      id: 872,
-      text: "scope",
-      meaning: "范围",
-      example:
-        "By agreeing on priorities and scope together, the team made a plan that was more realistic than simply accepting every request.",
-      translation:
-        "大家一起商定优先级和范围后，制定出的计划比不加筛选地接受所有请求更加现实。",
-      category: "职场沟通",
-    },
-    {
-      id: 873,
-      text: "product manager",
-      meaning: "产品经理",
-      example:
-        "At the start of a sprint, the product manager shared the team's priorities.",
-      translation: "迭代开始时，产品经理分享了团队的优先事项。",
-      category: "职场沟通",
-    },
-    {
-      id: 874,
-      text: "user interface",
-      meaning: "用户界面",
-      example:
-        "One feature depended on a change to the database, so the team planned that work before the user interface update.",
-      translation:
-        "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-      category: "职场沟通",
-    },
-    {
-      id: 875,
-      text: "smaller tasks",
-      meaning: "更小的任务",
-      example:
-        "They broke the work down into smaller tasks so everyone could see what needed to happen first.",
-      translation: "他们把工作拆成较小的任务，让大家看清应该先做什么。",
-      category: "职场沟通",
-    },
-    {
-      id: 876,
-      text: "start of a sprint",
-      meaning: "迭代开始时",
-      example:
-        "At the start of a sprint, the product manager shared the team's priorities.",
-      translation: "迭代开始时，产品经理分享了团队的优先事项。",
-      category: "职场沟通",
-    },
-    {
-      id: 320,
-      text: "update",
-      meaning: "更新",
-      example:
-        "One feature depended on a change to the database, so the team planned that work before the user interface update.",
-      translation:
-        "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-      category: "软件开发",
-      partOfSpeech: "verb",
-    },
-    {
-      id: 1,
-      text: "make a decision",
-      meaning: "做决定",
-      example:
-        "The team needed to make a decision about each request so developers could make progress without accepting everything.",
-      translation: "团队需要对每项请求做出决定，让开发人员能取得进展，而不是什么都接受。",
+      id: 1325,
+      text: "choice",
+      meaning: "选择",
+      example: "Mia and a friend discuss a choice of place to eat near the station.",
+      translation: "米娅和朋友讨论在车站附近选择一个吃饭的地方。",
       category: "Daily",
     },
     {
-      id: 3,
-      text: "figure it out",
-      meaning: "弄明白；想办法解决",
-      example:
-        "The lead said they could figure it out together and said, “Take your time so the plan will make sense.”",
-      translation: "负责人说大家可以一起想办法，并请每个人慢慢考虑，让计划合理。",
+      id: 1142,
+      text: "place",
+      meaning: "地方",
+      example: "Mia and a friend discuss a choice of place to eat near the station.",
+      translation: "米娅和朋友讨论在车站附近选择一个吃饭的地方。",
       category: "Daily",
     },
     {
-      id: 4,
-      text: "get along with",
-      meaning: "与……相处融洽",
+      id: 646,
+      text: "quiet",
+      meaning: "安静的",
       example:
-        "New teammates could get used to the process, get along with others, and keep in touch between meetings.",
-      translation: "新成员可以逐渐习惯流程、与他人融洽相处，并在会议之间保持联系。",
+        "One option is quiet with a higher price, while another is busy and has simple food.",
+      translation: "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
       category: "Daily",
     },
     {
-      id: 5,
-      text: "depend on",
-      meaning: "取决于",
+      id: 1138,
+      text: "busy",
+      meaning: "热闹的",
       example:
-        "They could request more details, update the plan, and make sure everyone understood how the interface would depend on the database.",
-      translation:
-        "他们可以请求更多细节、更新计划，并确保每个人都理解界面将如何依赖数据库。",
+        "One option is quiet with a higher price, while another is busy and has simple food.",
+      translation: "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
       category: "Daily",
     },
     {
-      id: 6,
-      text: "make sure",
-      meaning: "确保",
+      id: 1169,
+      text: "price",
+      meaning: "价格",
       example:
-        "They could request more details, update the plan, and make sure everyone understood how the interface would depend on the database.",
-      translation:
-        "他们可以请求更多细节、更新计划，并确保每个人都理解界面将如何依赖数据库。",
+        "One option is quiet with a higher price, while another is busy and has simple food.",
+      translation: "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
+      category: "Daily",
+    },
+    {
+      id: 1239,
+      text: "food",
+      meaning: "食物",
+      example:
+        "One option is quiet with a higher price, while another is busy and has simple food.",
+      translation: "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
+      category: "Daily",
+    },
+    {
+      id: 1111,
+      text: "near",
+      meaning: "附近",
+      example: "Mia and a friend discuss a choice of place to eat near the station.",
+      translation: "米娅和朋友讨论在车站附近选择一个吃饭的地方。",
+      category: "Daily",
+    },
+    {
+      id: 1190,
+      text: "option",
+      meaning: "选项",
+      example:
+        "One option is quiet with a higher price, while another is busy and has simple food.",
+      translation: "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
+      category: "Daily",
+    },
+    {
+      id: 1326,
+      text: "prefer",
+      meaning: "更喜欢",
+      example:
+        "They explain the reason they prefer a quieter option rather than only naming a favorite.",
+      translation: "他们解释了偏爱安静地方的原因，没有只说喜欢哪家。",
+      category: "Daily",
+    },
+    {
+      id: 1188,
+      text: "reason",
+      meaning: "原因",
+      example:
+        "They explain the reason they prefer a quieter option rather than only naming a favorite.",
+      translation: "他们解释了偏爱安静地方的原因，没有只说喜欢哪家。",
+      category: "Daily",
+    },
+    {
+      id: 1087,
+      text: "what do you recommend",
+      meaning: "你推荐什么",
+      example: "Mia asks, “What do you recommend for lunch?”",
+      translation: "米娅问：“午餐你推荐什么？”",
+      category: "Daily",
+      usagePattern: "What do you recommend for [need]?",
+    },
+    {
+      id: 1327,
+      text: "I would rather",
+      meaning: "我更愿意",
+      example:
+        "Her friend replies, “It depends on the price, but I would rather choose somewhere quiet, and what about you?”",
+      translation: "朋友回答：“这取决于价格，不过我更想选个安静的地方，你呢？”",
+      category: "Daily",
+      usagePattern: "I would rather [action].",
+    },
+    {
+      id: 1146,
+      text: "how about",
+      meaning: "……怎么样",
+      example:
+        "Mia says, “That café is a bit too busy, so how about the small place instead of the food hall?”",
+      translation: "米娅说：“那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？”",
+      category: "Daily",
+    },
+    {
+      id: 93,
+      text: "sounds good",
+      meaning: "听起来不错",
+      example:
+        "Her friend answers, “Good idea, that sounds good, and we can give it a try.”",
+      translation: "朋友回答：“好主意，听起来不错，我们可以试试。”",
+      category: "Daily",
+    },
+    {
+      id: 1328,
+      text: "it depends on",
+      meaning: "这取决于……",
+      example:
+        "Her friend replies, “It depends on the price, but I would rather choose somewhere quiet, and what about you?”",
+      translation: "朋友回答：“这取决于价格，不过我更想选个安静的地方，你呢？”",
+      category: "Daily",
+    },
+    {
+      id: 1329,
+      text: "a bit too",
+      meaning: "有点太……",
+      example:
+        "Mia says, “That café is a bit too busy, so how about the small place instead of the food hall?”",
+      translation: "米娅说：“那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？”",
+      category: "Daily",
+    },
+    {
+      id: 1330,
+      text: "instead of",
+      meaning: "而不是",
+      example:
+        "Mia says, “That café is a bit too busy, so how about the small place instead of the food hall?”",
+      translation: "米娅说：“那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？”",
+      category: "Daily",
+    },
+    {
+      id: 1224,
+      text: "what about you",
+      meaning: "你呢",
+      example:
+        "Her friend replies, “It depends on the price, but I would rather choose somewhere quiet, and what about you?”",
+      translation: "朋友回答：“这取决于价格，不过我更想选个安静的地方，你呢？”",
+      category: "Daily",
+    },
+    {
+      id: 18,
+      text: "give it a try",
+      meaning: "试一试",
+      example:
+        "Her friend answers, “Good idea, that sounds good, and we can give it a try.”",
+      translation: "朋友回答：“好主意，听起来不错，我们可以试试。”",
+      category: "Daily",
+    },
+    {
+      id: 1331,
+      text: "good idea",
+      meaning: "好主意",
+      example:
+        "Her friend answers, “Good idea, that sounds good, and we can give it a try.”",
+      translation: "朋友回答：“好主意，听起来不错，我们可以试试。”",
       category: "Daily",
     },
   ],
   articleVocabularyIds: [
-    868, 869, 308, 870, 862, 792, 193, 145, 871, 872, 873, 874, 875, 876, 320, 1, 3, 4, 5,
-    6,
+    1325, 1142, 646, 1138, 1169, 1239, 1111, 1190, 1326, 1188, 1087, 1327, 1146, 93, 1328,
+    1329, 1330, 1224, 18, 1331,
   ],
   article: {
     id: 25,
-    title: "Planning a Sprint Together",
-    topic: "产品与项目",
-    level: "中级 · 约 2 分钟",
-    summary:
-      "围绕“团队迭代计划”阅读完整情境，在文章中复习当天全部词汇，并练习so + 句子：说明安排的目的。",
+    title: "Choosing a Place Together",
+    topic: "日常交流",
+    level: "实用英语 · 对话与阅读",
+    summary: "围绕“推荐选择与说明偏好”练习提问、回应及确认下一步。",
     paragraphs: [
       {
-        text: "At the start of a sprint, the product manager shared the team's priorities. The developers reviewed each request and discussed its dependencies. They broke the work down into smaller tasks so everyone could see what needed to happen first.",
+        text: "Mia and a friend discuss a choice of place to eat near the station. One option is quiet with a higher price, while another is busy and has simple food.",
         translation:
-          "迭代开始时，产品经理分享了团队的优先事项。开发人员审查了各项请求并讨论它们之间的依赖关系。他们把工作拆成较小的任务，让大家看清应该先做什么。",
+          "米娅和朋友讨论在车站附近选择一个吃饭的地方。一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
         sentenceTranslations: [
-          "迭代开始时，产品经理分享了团队的优先事项。",
-          "开发人员审查了各项请求并讨论它们之间的依赖关系。",
-          "他们把工作拆成较小的任务，让大家看清应该先做什么。",
+          "米娅和朋友讨论在车站附近选择一个吃饭的地方。",
+          "一个选项安静但价格较高，另一个热闹，提供简单饭菜。",
         ],
       },
       {
-        text: "One feature depended on a change to the database, so the team planned that work before the user interface update. They also left time for testing. By agreeing on priorities and scope together, the team made a plan that was more realistic than simply accepting every request.",
+        text: "Mia asks, “What do you recommend for lunch?” Her friend replies, “It depends on the price, but I would rather choose somewhere quiet, and what about you?” Mia says, “That café is a bit too busy, so how about the small place instead of the food hall?” Her friend answers, “Good idea, that sounds good, and we can give it a try.”",
         translation:
-          "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。他们还留出了测试时间。大家一起商定优先级和范围后，制定出的计划比不加筛选地接受所有请求更加现实。",
+          "米娅问：“午餐你推荐什么？”朋友回答：“这取决于价格，不过我更想选个安静的地方，你呢？”米娅说：“那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？”朋友回答：“好主意，听起来不错，我们可以试试。”",
         sentenceTranslations: [
-          "有一项功能依赖数据库变更，因此团队安排先完成数据库工作，再更新用户界面。",
-          "他们还留出了测试时间。",
-          "大家一起商定优先级和范围后，制定出的计划比不加筛选地接受所有请求更加现实。",
+          "米娅问：“午餐你推荐什么？”",
+          "朋友回答：“这取决于价格，不过我更想选个安静的地方，你呢？”",
+          "米娅说：“那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？”",
+          "朋友回答：“好主意，听起来不错，我们可以试试。”",
         ],
       },
       {
-        text: "The team needed to make a decision about each request so developers could make progress without accepting everything. They could request more details, update the plan, and make sure everyone understood how the interface would depend on the database. To find out how to deal with uncertainty before they could run out of time, they agreed to give it a try with a small prototype. The lead said they could figure it out together and said, “Take your time so the plan will make sense.” New teammates could get used to the process, get along with others, and keep in touch between meetings. They could look forward to testing a smaller, achievable feature.",
+        text: "They explain the reason they prefer a quieter option rather than only naming a favorite. They choose the small quiet place.",
         translation:
-          "团队需要对每项请求做出决定，让开发人员能取得进展，而不是什么都接受。他们可以请求更多细节、更新计划，并确保每个人都理解界面将如何依赖数据库。为了在时间耗尽前弄清如何应对不确定性，他们同意用小型原型试一试。负责人说大家可以一起想办法，并请每个人慢慢考虑，让计划合理。新成员可以逐渐习惯流程、与他人融洽相处，并在会议之间保持联系。他们可以期待测试一个更小且能够实现的功能。",
+          "他们解释了偏爱安静地方的原因，没有只说喜欢哪家。他们选择了那家安静的小店。",
         sentenceTranslations: [
-          "团队需要对每项请求做出决定，让开发人员能取得进展，而不是什么都接受。",
-          "他们可以请求更多细节、更新计划，并确保每个人都理解界面将如何依赖数据库。",
-          "为了在时间耗尽前弄清如何应对不确定性，他们同意用小型原型试一试。",
-          "负责人说大家可以一起想办法，并请每个人慢慢考虑，让计划合理。",
-          "新成员可以逐渐习惯流程、与他人融洽相处，并在会议之间保持联系。",
-          "他们可以期待测试一个更小且能够实现的功能。",
+          "他们解释了偏爱安静地方的原因，没有只说喜欢哪家。",
+          "他们选择了那家安静的小店。",
         ],
       },
     ],
     questions: [
       {
-        prompt: "Why did the team plan the database work first?",
+        prompt: "What are the speakers mainly trying to do?",
         options: [
-          "Another feature depended on it.",
-          "The user interface was already finished.",
-          "The team wanted to skip testing.",
+          "Acknowledge a concern and agree on a realistic response.",
+          "Explain a travel delay and agree on a backup plan.",
+          "Compare options and explain personal preferences.",
         ],
-        answer: 0,
-        explanation: "The user interface work depended on the database change.",
+        answer: 2,
+        explanation: "双方围绕“推荐选择与说明偏好”交流，并确认具体安排。",
       },
       {
-        prompt: "Which sentence matches the reading and today's language focus?",
+        prompt: "Which statement matches the agreed next step or result?",
         options: [
-          "They made smaller tasks so everyone see the order.",
-          "They made smaller tasks so everyone could see the order.",
+          "They will meet at the main entrance when Sam arrives.",
+          "They choose the small quiet place.",
+          "Ava will check another delivery option before promising an arrival date.",
         ],
         answer: 1,
-        explanation:
-          "so 后面接一个完整句子，说明前面的安排带来的结果或目的。 so 后接完整句子；could 后用动词原形 see。 回到文章找出这个句型，再用当天的两个词汇描述“团队迭代计划”的情境。",
+        explanation: "他们选择了那家安静的小店。",
       },
       {
-        prompt: "In this reading, what does “make a decision” mean?",
-        options: ["做决定", "慢慢来", "讲得通；有道理"],
+        prompt: "Which line is useful when you want to ask for a recommendation?",
+        options: [
+          "What do you recommend for lunch?",
+          "I am sorry about the delay, could you tell me what happened?",
+          "I am on my way but running late, so what if I miss the train?",
+        ],
         answer: 0,
-        explanation:
-          "结合原句理解：The team needed to make a decision about each request so developers could make progress without accepting everything.（团队需要对每项请求做出决定，让开发人员能取得进展，而不是什么都接受。）",
+        explanation: "米娅问：“午餐你推荐什么？”",
       },
     ],
     gap: {
-      sentence:
-        "The team needed to ______ about each request so developers could make progress without accepting everything.",
-      answer: "make a decision",
-      hint: "提示：做决定",
+      sentence: "Mia asks, “______ for lunch?”",
+      answer: "What do you recommend",
+      hint: "你推荐什么",
     },
   },
-  grammarBlank: "so",
+  grammarBlank: "would",
   grammar: {
     id: 1025,
-    title: "so + 句子：说明安排的目的",
-    explanation: "so 后面接一个完整句子，说明前面的安排带来的结果或目的。",
+    title: "would rather：表达偏好",
+    explanation: "I would rather 后接动词原形，说明更愿意做什么。",
     example:
-      "They broke the work down into smaller tasks so everyone could see what needed to happen first.",
-    wrong: "They made smaller tasks so everyone see the order.",
-    correct: "They made smaller tasks so everyone could see the order.",
-    note: "so 后接完整句子；could 后用动词原形 see。 回到文章找出这个句型，再用当天的两个词汇描述“团队迭代计划”的情境。",
+      "Her friend replies, “It depends on the price, but I would rather choose somewhere quiet, and what about you?”",
+    wrong: "I would rather to choose a quiet place.",
+    correct: "I would rather choose a quiet place.",
+    note: "I would rather 后接动词原形，说明更愿意做什么。",
   },
+  vocabularyGroups: [
+    {
+      title: "场景与需求",
+      vocabularyIds: [1325, 1142, 646, 1138, 1169, 1087, 1327, 1146, 93, 1328],
+    },
+    {
+      title: "回应与下一步",
+      vocabularyIds: [1239, 1111, 1190, 1326, 1188, 1329, 1330, 1224, 18, 1331],
+    },
+  ],
+  dialogue: [
+    {
+      speaker: "A",
+      text: "What do you recommend for lunch?",
+      translation: "午餐你推荐什么？",
+    },
+    {
+      speaker: "B",
+      text: "It depends on the price, but I would rather choose somewhere quiet, and what about you?",
+      translation: "这取决于价格，不过我更想选个安静的地方，你呢？",
+    },
+    {
+      speaker: "A",
+      text: "That café is a bit too busy, so how about the small place instead of the food hall?",
+      translation: "那家咖啡馆有点太热闹了，我们不去餐饮区，选那家小店怎么样？",
+    },
+    {
+      speaker: "B",
+      text: "Good idea, that sounds good, and we can give it a try.",
+      translation: "好主意，听起来不错，我们可以试试。",
+    },
+  ],
+  extensionVocabulary: [],
 });

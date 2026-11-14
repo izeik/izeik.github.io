@@ -8,6 +8,8 @@ export interface Expression {
   category: string;
   /** Part of speech or learning-item type, when supplied. */
   partOfSpeech?: string;
+  /** A reusable frame; bracketed slots are not part of the original reading. */
+  usagePattern?: string;
 }
 const raw: [string, string, string, string, string][] = [
   [

@@ -25,12 +25,12 @@ const vuetify = createVuetify({
     themes: {
       light: {
         colors: {
-          primary: "#6757d9",
-          secondary: "#27a89b",
-          background: "#f6f7fb",
+          primary: "#284f43",
+          secondary: "#c6502e",
+          background: "#f7f8f2",
           surface: "#ffffff",
-          success: "#219b79",
-          warning: "#e7a348",
+          success: "#35785b",
+          warning: "#b77b25",
         },
       },
     },

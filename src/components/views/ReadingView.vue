@@ -3,6 +3,9 @@ import { computed, inject, onBeforeUnmount, ref, watch } from "vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 import { splitEnglishSentences, type ReadingArticle } from "../../data/articles";
 import GapFeedback from "../GapFeedback.vue";
+import { dailyLessons } from "../../data/lessons";
+import { readingTokens } from "../../data/readingTokens";
+import { useReinforcementStore } from "../../stores/reinforcement";
 import WordLookup from "../WordLookup.vue";
 
 const context = inject<TrainerContext>("trainer")!;
@@ -10,6 +13,19 @@ const { store, articles, speak, expressions } = context;
 const selectedId = ref(store.selectedArticleId || articles[0].id);
 const article = computed(
   () => articles.find((item) => item.id === selectedId.value) ?? articles[0],
+);
+const reinforcement = useReinforcementStore();
+const lookupEntries = computed(() => [
+  ...(dailyLessons.find((l) => l.article.id === article.value.id)?.vocabulary ?? []),
+  ...expressions,
+]);
+const tokenizedSentences = computed(
+  () =>
+    new Map(
+      article.value.paragraphs
+        .flatMap((p) => splitEnglishSentences(p.text))
+        .map((sentence) => [sentence, readingTokens(sentence, lookupEntries.value)]),
+    ),
 );
 const selectedAnswers = ref<number[]>([]);
 const gapAnswer = ref("");
@@ -19,6 +35,7 @@ const lastAnswers = ref<number[]>([]);
 const lastGap = ref("");
 const acceptedAlternative = ref(false);
 const shadowing = ref(false);
+const activeSentence = ref("");
 const showTranslations = ref(false);
 const completed = computed(() => store.articleCompletions.includes(article.value.id));
 const readingScore = computed(
@@ -57,6 +74,7 @@ const canFinish = computed(
 let playback = 0;
 function stopPlayback() {
   playback++;
+  activeSentence.value = "";
   shadowing.value = false;
   window.speechSynthesis?.cancel();
 }
@@ -81,6 +99,8 @@ function checkReading() {
   const questions = article.value.questions;
   let mistakes = 0;
   questions.forEach((q, i) => {
+    if (selectedAnswers.value[i] !== lastAnswers.value[i])
+      reinforcement.record("阅读理解", selectedAnswers.value[i] === q.answer);
     if (
       selectedAnswers.value[i] !== q.answer &&
       selectedAnswers.value[i] !== lastAnswers.value[i]
@@ -91,6 +111,13 @@ function checkReading() {
         q.options[q.answer],
         "文章阅读理解",
         `《${article.value.title}》 ${q.prompt} ${q.explanation}`,
+        {
+          sentence: q.prompt,
+          answer: q.options[q.answer]!,
+          hint: q.explanation,
+          options: q.options,
+          context: article.value.paragraphs.map((p) => p.text).join("\n"),
+        },
       );
     }
   });
@@ -103,19 +130,43 @@ function checkGap() {
   checkedGap.value = true;
   lastGap.value = normalizeAnswer(gapAnswer.value);
   acceptedAlternative.value = false;
+  reinforcement.record("阅读补全", gapCorrect.value);
+  if (!gapCorrect.value)
+    store.addError(
+      gapAnswer.value.trim(),
+      article.value.gap.answer,
+      "阅读补全 · 待复习",
+      article.value.title,
+      {
+        sentence: article.value.gap.sentence,
+        answer: article.value.gap.answer,
+        hint: article.value.gap.hint,
+      },
+    );
   store.logSession(1);
 }
 
 function onGapReviewed(result: { verdict: string; suggestion: string; reason: string }) {
   if (!checkedGap.value || gapCorrect.value) return;
   acceptedAlternative.value = result.verdict === "natural";
-  if (result.verdict === "unsuitable") {
-    store.addError(
-      gapAnswer.value.trim(),
-      result.suggestion,
-      "文章句子补全",
-      `《${article.value.title}》 · AI 解析：${result.reason}`,
+  if (result.verdict === "natural") {
+    const entry = store.errors.find(
+      (e) =>
+        e.type === "阅读补全 · 待复习" &&
+        e.exercise?.sentence === article.value.gap.sentence,
     );
+    if (entry) store.resolveError(entry.id, true, "ai");
+  }
+  if (result.verdict === "unsuitable") {
+    const entry = store.errors.find(
+      (e) =>
+        e.type === "阅读补全 · 待复习" &&
+        e.exercise?.sentence === article.value.gap.sentence,
+    );
+    if (entry) {
+      entry.note = `《${article.value.title}》 · AI 解析：${result.reason}`;
+      if (entry.exercise) entry.exercise.hint = result.reason;
+    }
   }
 }
 
@@ -139,30 +190,30 @@ function readParagraphs() {
     const sentence = sentences[index++];
     if (!sentence) {
       shadowing.value = false;
+      activeSentence.value = "";
       return;
     }
+    activeSentence.value = sentence;
     speak(sentence, playNextSentence, () => {
-      if (currentPlayback === playback) shadowing.value = false;
+      if (currentPlayback === playback) {
+        activeSentence.value = "";
+        shadowing.value = false;
+      }
     });
   };
   playNextSentence();
 }
 
 function playSentence(sentence: string) {
+  const same = activeSentence.value === sentence;
   stopPlayback();
-  speak(sentence);
-}
-
-function sentenceTokens(sentence: string) {
-  return (
-    sentence.match(/[A-Za-z]+(?:['’][A-Za-z]+)*|\d+(?:\.\d+)?|[^A-Za-z0-9]+/g) ?? [
-      sentence,
-    ]
-  );
-}
-
-function isWordToken(token: string) {
-  return /^[A-Za-z]/.test(token);
+  if (same) return;
+  const request = playback;
+  activeSentence.value = sentence;
+  const finish = () => {
+    if (request === playback) activeSentence.value = "";
+  };
+  speak(sentence, finish, finish);
 }
 
 function chooseArticle(item: ReadingArticle) {
@@ -177,7 +228,8 @@ function chooseArticle(item: ReadingArticle) {
       <div>
         <div class="page-title">读一篇，听一句，再自己说</div>
         <div class="muted mt-1">
-          {{ articles.length }} 篇中级短文，结合影子跟读、阅读理解和句子补全。
+          30 篇日常与通用职场配套阅读，另有
+          {{ articles.length - 30 }} 篇扩展材料；结合跟读、理解与句子补全。
         </div>
       </div>
       <v-chip color="primary" variant="tonal"
@@ -198,7 +250,10 @@ function chooseArticle(item: ReadingArticle) {
               @click="chooseArticle(item)"
             >
               <template #title>{{ item.id }}. {{ item.title }}</template>
-              <template #subtitle>{{ item.topic }} · {{ item.level }}</template>
+              <template #subtitle
+                >{{ item.id > 30 ? "扩展阅读 · " : "日课配套 · " }}{{ item.topic }} ·
+                {{ item.level }}</template
+              >
               <template #append>
                 <v-icon
                   v-if="store.articleCompletions.includes(item.id)"
@@ -216,7 +271,8 @@ function chooseArticle(item: ReadingArticle) {
           <div class="d-flex flex-wrap justify-space-between align-center ga-3">
             <div>
               <v-chip size="small" color="primary" variant="tonal"
-                >{{ article.topic }} · {{ article.level }}</v-chip
+                >{{ article.id > 30 ? "可选扩展 · " : "日课配套 · "
+                }}{{ article.topic }} · {{ article.level }}</v-chip
               >
               <h2 class="text-h5 font-weight-bold mt-3">{{ article.title }}</h2>
             </div>
@@ -232,7 +288,7 @@ function chooseArticle(item: ReadingArticle) {
             </v-btn>
           </div>
           <v-alert class="mt-4" variant="tonal" color="info" icon="mdi-headphones"
-            >点击英文句子可单独播放。显示翻译后，悬停或触碰单词可查看词义和词性。</v-alert
+            >点击每句前的扬声器朗读，再点可停止。悬停或轻触下划线表达查义；实线优先表示完整短语，查词不会触发整句播放。</v-alert
           >
           <div
             v-for="(paragraph, index) in article.paragraphs"
@@ -248,29 +304,38 @@ function chooseArticle(item: ReadingArticle) {
                   :key="sentenceIndex"
                   ><span
                     class="sentence-unit"
-                    :class="{ 'show-translation': showTranslations }"
-                    ><span
-                      class="sentence-text"
-                      role="button"
-                      tabindex="0"
+                    :class="{
+                      'show-translation': showTranslations,
+                      'is-playing': activeSentence === sentence,
+                    }"
+                  >
+                    <button
+                      class="sentence-play"
+                      type="button"
+                      :aria-label="`${activeSentence === sentence ? '停止' : '朗读'}第 ${index + 1} 段第 ${sentenceIndex + 1} 句`"
+                      :aria-pressed="activeSentence === sentence"
                       @click="playSentence(sentence)"
-                      @keydown.enter.self.prevent="playSentence(sentence)"
-                      @keydown.space.self.prevent="playSentence(sentence)"
-                      ><template v-if="showTranslations"
-                        ><template
-                          v-for="(token, tokenIndex) in sentenceTokens(sentence)"
-                          :key="tokenIndex"
-                          ><WordLookup
-                            v-if="isWordToken(token)"
-                            :key="token"
-                            :word="token"
-                            :expressions="expressions"
-                          /><span v-else>{{ token }}</span></template
-                        ></template
-                      ><template v-else>{{ sentence }}</template></span
-                    ><span v-if="showTranslations" class="sentence-translation">{{
+                    >
+                      <v-icon size="17">{{
+                        activeSentence === sentence ? "mdi-stop" : "mdi-volume-medium"
+                      }}</v-icon>
+                    </button>
+                    <span class="sentence-text"
+                      ><template
+                        v-for="(token, tokenIndex) in tokenizedSentences.get(sentence)!"
+                        :key="tokenIndex"
+                        ><WordLookup
+                          v-if="token.lookup"
+                          :word="token.text"
+                          :lookup="token.lookup"
+                          :phrase="token.phrase"
+                          :expressions="lookupEntries"
+                        /><span v-else>{{ token.text }}</span></template
+                      ></span
+                    >
+                    <span v-if="showTranslations" class="sentence-translation">{{
                       paragraph.sentenceTranslations[sentenceIndex]
-                    }}</span></span
+                    }}</span> </span
                   >{{ " " }}</template
                 >
               </p>
@@ -311,6 +376,19 @@ function chooseArticle(item: ReadingArticle) {
                   : `参考答案：${question.options[question.answer]}。`
               }}{{ question.explanation }}
             </v-alert>
+            <GapFeedback
+              v-if="checkedReading"
+              :key="`${article.id}-${index}`"
+              kind="choice"
+              :sentence="
+                question.prompt +
+                '\n' +
+                question.options.map((o, i) => `${i + 1}. ${o}`).join('\n')
+              "
+              :answer="question.options[selectedAnswers[index]!]!"
+              :reference="question.options[question.answer]!"
+              :focus="article.paragraphs.map((p) => p.text).join('\n')"
+            />
           </div>
           <div class="d-flex flex-wrap align-center ga-3">
             <v-btn
@@ -426,7 +504,7 @@ function chooseArticle(item: ReadingArticle) {
   text-align: left;
   vertical-align: baseline;
   font: inherit;
-  cursor: pointer;
+  cursor: text;
   border-radius: 4px;
 }
 .sentence-unit.show-translation {
@@ -440,15 +518,40 @@ function chooseArticle(item: ReadingArticle) {
   line-height: 1.65;
   margin-top: 2px;
 }
-.sentence-text:hover,
-.sentence-text:focus-visible {
-  background: #f1efff;
-  outline: none;
+.sentence-play {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-right: 6px;
+  border: 1px solid #dce4d4;
+  border-radius: 50%;
+  color: #4c6848;
+  background: #f5f8ef;
+  vertical-align: middle;
+  transition: background 0.15s;
+}
+.sentence-play:hover,
+.sentence-play[aria-pressed="true"] {
+  background: #dfeacc;
+  color: #284f43;
+}
+.sentence-unit.is-playing .sentence-text {
+  background: #eff4e5;
+  border-radius: 4px;
+}
+.sentence-play:focus-visible {
+  outline: 2px solid #284f43;
+  outline-offset: 3px;
 }
 .gap-input {
   max-width: 320px;
 }
 @media (max-width: 959px) {
+  .sentence-play {
+    width: 32px;
+    height: 32px;
+  }
   .article-picker {
     position: static;
   }

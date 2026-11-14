@@ -25,7 +25,9 @@ function normalizeWord(word: string) {
   return word
     .toLowerCase()
     .replace(/[’']/g, "'")
-    .replace(/[^a-z'-]/g, "")
+    .replace(/[^a-z'\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, " ")
     .replace(/'s$/, "");
 }
 
@@ -58,7 +60,7 @@ function writeCache(word: string, result: WordLookupResult) {
 }
 
 function localEntry(word: string, expressions: Expression[]) {
-  return expressions.find((entry) => entry.text.toLowerCase() === word);
+  return expressions.find((entry) => normalizeWord(entry.text) === word);
 }
 
 function mapPartOfSpeech(value: string) {
@@ -91,7 +93,9 @@ function localFallback(word: string, expressions: Expression[]): WordLookupResul
     meaning: entry?.meaning ?? "暂时无法获取这个词的中文释义。",
     partOfSpeech: entry?.partOfSpeech
       ? mapPartOfSpeech(entry.partOfSpeech)
-      : "词性暂不可用",
+      : word.includes(" ")
+        ? "短语"
+        : "词性暂不可用",
     source: entry ? "local" : "unavailable",
     updatedAt: Date.now(),
   };
@@ -164,7 +168,7 @@ export function useWordLookup() {
     if (!word) return localFallback(rawWord, expressions);
 
     const local = localFallback(word, expressions);
-    if (local.source === "local") return local;
+    if (local.source === "local" || word.includes(" ")) return local;
 
     const memory = cache.get(word);
     if (memory) return memory;

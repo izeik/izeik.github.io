@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide } from "vue";
+import { computed, provide, ref } from "vue";
 import { useTrainer } from "./composables/useTrainer";
 import DashboardView from "./components/views/DashboardView.vue";
 import VocabularyView from "./components/views/VocabularyView.vue";
@@ -24,107 +24,165 @@ const views = {
   statistics: StatisticsView,
 };
 const activeView = computed(() => views[page.value as keyof typeof views]);
+const moreOpen = ref(false);
+const primaryNav = computed(() => nav.slice(0, 6));
+const secondaryNav = computed(() => nav.slice(6));
+const mobileNav = computed(() =>
+  nav.filter((item) =>
+    ["dashboard", "vocabulary", "reading", "speaking"].includes(item.id),
+  ),
+);
+const currentLabel = computed(() => nav.find((item) => item.id === page.value)?.label);
+function navigate(id: string) {
+  page.value = id;
+  moreOpen.value = false;
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
 </script>
 
 <template>
-  <v-app
-    ><v-navigation-drawer permanent width="216" class="desktop-nav" color="white"
-      ><div class="pa-5 d-flex align-center ga-3">
-        <div class="brand-icon">
-          <v-icon color="white">mdi-message-text</v-icon>
-        </div>
-        <div>
-          <div class="font-weight-bold">Everyday English</div>
-          <div class="text-caption muted">日常英语训练</div>
-        </div>
-      </div>
-      <div class="px-3 pt-2">
-        <div class="eyebrow px-3 pb-2">学习空间</div>
-        <v-btn
-          v-for="n in nav"
-          :key="n.id"
-          block
-          variant="text"
-          class="nav-item justify-start"
-          :class="{ 'text-primary nav-active': page === n.id }"
-          @click="page = n.id"
-          ><template #prepend
-            ><v-icon>{{ n.icon }}</v-icon></template
-          >{{ n.label }}</v-btn
+  <v-app>
+    <a class="skip-link" href="#main-content">跳到学习内容</a>
+    <aside class="app-sidebar" aria-label="主导航">
+      <button
+        class="brand"
+        aria-label="Everyday English 学习首页"
+        @click="navigate('dashboard')"
+      >
+        <span class="brand-symbol"><v-icon>mdi-leaf</v-icon></span>
+        <span>everyday<span class="brand-subtitle">ENGLISH STUDIO</span></span>
+      </button>
+      <div class="sidebar-label">你的学习空间</div>
+      <nav class="sidebar-links">
+        <button
+          v-for="item in primaryNav"
+          :key="item.id"
+          :class="['sidebar-link', { active: page === item.id }]"
+          :aria-current="page === item.id ? 'page' : undefined"
+          @click="navigate(item.id)"
         >
-      </div>
-      <template #append
-        ><v-card flat color="deep-purple-lighten-5" class="ma-4 pa-4"
-          ><div class="d-flex ga-2 align-center">
-            <v-icon color="primary">mdi-lightbulb-on-outline</v-icon
-            ><b class="text-body-2">每日一点进步</b>
-          </div>
-          <div class="text-caption muted mt-2">
-            短时间、常练习，让英语自然融入生活。
-          </div></v-card
-        ></template
-      ></v-navigation-drawer
-    >
-    <v-main
-      ><div class="main-shell mobile-content" :class="`page-${page}`">
-        <div class="workspace-header d-flex justify-space-between align-center">
-          <div>
-            <div class="eyebrow">
-              {{
-                new Date().toLocaleDateString("zh-CN", {
-                  month: "long",
-                  day: "numeric",
-                  weekday: "long",
-                })
-              }}
-            </div>
-            <div class="page-title">
-              {{ nav.find((n) => n.id === page)?.label }}
-              <span v-if="page === 'dashboard'">，继续保持 🌱</span>
-            </div>
-          </div>
-          <div class="d-flex align-center ga-2">
-            <v-avatar color="deep-purple-lighten-5" size="42"
-              ><v-icon color="primary">mdi-account-outline</v-icon></v-avatar
-            >
-            <div class="d-none d-sm-block">
-              <div class="text-body-2 font-weight-bold">学习者</div>
-              <div class="text-caption muted">日常练习中</div>
-            </div>
-          </div>
+          <v-icon size="21">{{ item.icon }}</v-icon
+          ><span>{{ item.label }}</span
+          ><v-icon v-if="page === item.id" class="nav-arrow" size="16"
+            >mdi-arrow-top-right</v-icon
+          >
+        </button>
+      </nav>
+      <div class="sidebar-label mt-7">回顾与成长</div>
+      <nav class="sidebar-links">
+        <button
+          v-for="item in secondaryNav"
+          :key="item.id"
+          :class="['sidebar-link', { active: page === item.id }]"
+          :aria-current="page === item.id ? 'page' : undefined"
+          @click="navigate(item.id)"
+        >
+          <v-icon size="21">{{ item.icon }}</v-icon
+          ><span>{{ item.label }}</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note">
+          <span class="note-star">✳</span>
+          <p>一点练习，<br />多一点自信。</p>
+          <span>Small steps. Real progress.</span
+          ><button @click="navigate('speaking')">
+            开口练一句 <v-icon size="16">mdi-arrow-right</v-icon>
+          </button>
         </div>
-        <v-alert v-if="store.storageWarning" type="warning" class="mb-3">{{
+        <div class="sidebar-footer">
+          <span class="online-dot"></span>学习记录保存在此设备
+        </div>
+      </div>
+    </aside>
+    <main id="main-content" class="app-main" tabindex="-1">
+      <div class="main-shell" :class="`page-${page}`">
+        <header class="workspace-header">
+          <div class="breadcrumb">
+            <span class="desktop-crumb"
+              >我的学习空间 <span class="crumb-divider">/</span></span
+            ><span>{{ currentLabel }}</span>
+          </div>
+          <div class="header-actions">
+            <span class="date-label">{{
+              new Date().toLocaleDateString("zh-CN", {
+                month: "long",
+                day: "numeric",
+                weekday: "short",
+              })
+            }}</span
+            ><button
+              class="streak-pill"
+              aria-label="查看连续学习统计"
+              @click="navigate('statistics')"
+            >
+              <v-icon size="18">mdi-fire</v-icon>{{ store.streak }} 天
+            </button>
+            <div class="learner-avatar" aria-label="学习者">E<span></span></div>
+          </div>
+        </header>
+        <v-alert v-if="store.storageWarning" type="warning" class="mb-4">{{
           store.storageWarning
         }}</v-alert>
         <component :is="activeView" />
+        <footer class="workspace-footer">
+          <span>everyday / 每天，离自然表达更近一点。</span><span>为自己而学。</span>
+        </footer>
       </div>
-      <nav class="bottom-nav">
-        <button
-          v-for="n of nav"
-          :key="n.id"
-          :class="{ active: page === n.id }"
-          :aria-current="page === n.id ? 'page' : undefined"
-          @click="page = n.id"
-        >
-          <v-icon size="21">{{ n.icon }}</v-icon
-          >{{ n.label }}
-        </button>
-      </nav>
-      <div v-if="notice" class="notice" role="status">{{ notice }}</div></v-main
-    ></v-app
-  >
+    </main>
+    <nav class="bottom-nav" aria-label="手机主导航">
+      <button
+        v-for="item in mobileNav"
+        :key="item.id"
+        :class="{ active: page === item.id }"
+        :aria-current="page === item.id ? 'page' : undefined"
+        @click="navigate(item.id)"
+      >
+        <v-icon size="22">{{ item.icon }}</v-icon
+        ><span>{{
+          item.id === "dashboard"
+            ? "首页"
+            : item.id === "speaking"
+              ? "口语"
+              : item.id === "reading"
+                ? "阅读"
+                : "词汇"
+        }}</span>
+      </button>
+      <button
+        :class="{ active: !mobileNav.some((item) => item.id === page) }"
+        aria-label="更多学习模块"
+        :aria-expanded="moreOpen"
+        @click="moreOpen = true"
+      >
+        <v-icon size="22">mdi-dots-horizontal</v-icon><span>更多</span>
+      </button>
+    </nav>
+    <v-bottom-sheet v-model="moreOpen" max-width="560">
+      <v-card class="mobile-module-menu pa-5" aria-labelledby="module-menu-title"
+        ><div class="d-flex align-center justify-space-between mb-4">
+          <h2 id="module-menu-title" class="text-h6">探索学习空间</h2>
+          <v-btn
+            icon="mdi-close"
+            variant="text"
+            size="small"
+            aria-label="关闭模块菜单"
+            @click="moreOpen = false"
+          />
+        </div>
+        <div class="mobile-module-grid">
+          <button
+            v-for="item in nav"
+            :key="item.id"
+            :class="{ active: page === item.id }"
+            @click="navigate(item.id)"
+          >
+            <v-icon>{{ item.icon }}</v-icon
+            >{{ item.label }}
+          </button>
+        </div></v-card
+      >
+    </v-bottom-sheet>
+    <div v-if="notice" class="notice" role="status">{{ notice }}</div>
+  </v-app>
 </template>
-<style scoped>
-.brand-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: #6757d9;
-  display: grid;
-  place-items: center;
-}
-.expression-list {
-  max-height: 480px;
-  overflow: auto;
-}
-</style>

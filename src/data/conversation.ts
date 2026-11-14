@@ -412,7 +412,7 @@ export const speakingScenarios = [
   { label: "交友", items: dailyQuestions([10, 25, 26, 27, 28, 29, 30, 38]) },
   { label: "职场英语", items: workplacePrompts },
   {
-    label: "技术面试",
+    label: "技术面试 · 扩展",
     items: [
       {
         question: "What was your role in your last project?",
@@ -433,5 +433,5 @@ export const speakingScenarios = [
       },
     ],
   },
-  { label: "软件开发", items: developmentPrompts },
+  { label: "软件开发 · 扩展", items: developmentPrompts },
 ];
