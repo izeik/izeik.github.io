@@ -272,12 +272,12 @@ export default defineLesson({
   grammar: {
     id: 1008,
     title: "did not：说明没有听清",
-    explanation: "did not 后接动词原形，表达过去未完成的动作。",
+    explanation: "did not 后接动词原形，表达过去没有发生或没有做到的事。",
     example:
       "Ava says, “I did not catch the last part, so let me check: do you mean room fourteen, is that right?”",
     wrong: "I did not caught the last part.",
     correct: "I did not catch the last part.",
-    note: "did not 后接动词原形，表达过去未完成的动作。",
+    note: "did not 后接动词原形，表达过去没有发生或没有做到的事。",
   },
   vocabularyGroups: [
     {

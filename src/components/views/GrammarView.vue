@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from "vue";
+import GrammarTenseHint from "../GrammarTenseHint.vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 
 const context = inject<TrainerContext>("trainer")!;
@@ -47,8 +48,16 @@ function logReview() {
   <section>
     <div class="page-title">把语法用进真实表达</div>
     <div class="muted mt-1 mb-4">
-      先完成一个生活或职场表达任务，再换个内容用同一个句型。不做考试题。
+      结合旁边的时态与句型提示造句，再与示例对照；也可以进入独立时态页练习动词形式。
     </div>
+    <v-btn
+      class="mb-4"
+      color="primary"
+      variant="tonal"
+      prepend-icon="mdi-clock-outline"
+      @click="context.page.value = 'tenses'"
+      >打开英语时态练习 · 结构讲解与填空</v-btn
+    >
     <v-row>
       <v-col cols="12" md="3">
         <v-card class="pa-3">
@@ -87,49 +96,52 @@ function logReview() {
             </div>
           </v-card>
 
-          <div class="mt-5">
-            <div class="eyebrow">先试着表达</div>
-            <div class="text-body-1 mt-2">{{ currentGrammar.task }}</div>
-            <v-text-field
-              v-model="grammarAnswer"
-              label="用英文写下你会怎么说"
-              placeholder="先按自己的想法表达，不必追求复杂句子"
-              variant="outlined"
-              class="mt-3"
-              hide-details
-              :disabled="firstSubmitted"
-              @keyup.enter="submitFirstTask"
-            />
-            <v-btn
-              class="mt-3"
-              color="primary"
-              :disabled="firstSubmitted || !grammarAnswer.trim()"
-              @click="submitFirstTask"
-            >
-              {{ firstSubmitted ? "已完成" : "查看自然表达" }}
-            </v-btn>
-            <v-expand-transition>
-              <v-card
-                v-if="firstSubmitted"
-                flat
-                color="green-lighten-5"
-                class="pa-4 mt-4"
+          <div class="grammar-task-grid mt-5">
+            <div>
+              <div class="eyebrow">先试着表达</div>
+              <div class="text-body-1 mt-2">{{ currentGrammar.task }}</div>
+              <v-text-field
+                v-model="grammarAnswer"
+                label="用英文写下你会怎么说"
+                placeholder="先按自己的想法表达，不必追求复杂句子"
+                variant="outlined"
+                class="mt-3"
+                hide-details
+                :disabled="firstSubmitted"
+                @keyup.enter="submitFirstTask"
+              />
+              <v-btn
+                class="mt-3"
+                color="primary"
+                :disabled="firstSubmitted || !grammarAnswer.trim()"
+                @click="submitFirstTask"
               >
-                <div class="eyebrow">自然表达示例</div>
-                <div class="text-body-1 font-weight-medium mt-2">
-                  {{ currentGrammar.model }}
-                </div>
-                <div class="text-body-2 mt-2">你的表达：{{ grammarAnswer }}</div>
-                <div class="text-body-2 muted mt-2">
-                  {{ currentGrammar.explanation }} {{ currentGrammar.note }}
-                </div>
-                <div class="text-caption mt-2">
-                  对照时只关注本组句型是否用对；意思相近的表达也可以成立。
-                </div>
-              </v-card>
-            </v-expand-transition>
-          </div>
+                {{ firstSubmitted ? "已完成" : "查看自然表达" }}
+              </v-btn>
+              <v-expand-transition>
+                <v-card
+                  v-if="firstSubmitted"
+                  flat
+                  color="green-lighten-5"
+                  class="pa-4 mt-4"
+                >
+                  <div class="eyebrow">自然表达示例</div>
+                  <div class="text-body-1 font-weight-medium mt-2">
+                    {{ currentGrammar.model }}
+                  </div>
+                  <div class="text-body-2 mt-2">你的表达：{{ grammarAnswer }}</div>
+                  <div class="text-body-2 muted mt-2">
+                    {{ currentGrammar.explanation }} {{ currentGrammar.note }}
+                  </div>
+                  <div class="text-caption mt-2">
+                    对照时只关注本组句型是否用对；意思相近的表达也可以成立。
+                  </div>
+                </v-card>
+              </v-expand-transition>
+            </div>
 
+            <GrammarTenseHint :focus="currentGrammar" />
+          </div>
           <v-divider class="my-4" />
 
           <div :class="{ 'practice-locked': !firstSubmitted }">
@@ -209,6 +221,21 @@ function logReview() {
 </template>
 
 <style scoped>
+.grammar-task-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1199px) {
+  .grammar-task-grid > .grammar-tense-hint {
+    order: -1;
+  }
+}
+@media (min-width: 1200px) {
+  .grammar-task-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
+  }
+}
 .grammar-list {
   max-height: min(70vh, 720px);
   overflow-y: auto;

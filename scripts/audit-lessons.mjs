@@ -240,6 +240,73 @@ try {
     readingGapCount += gaps.length;
   }
   assert.equal(readingGapCount, 120);
+  const { tenses, tenseAnswerMatches, mixedTenseExercises } = await import(
+    pathToFileURL(path.join(compiled, "tenses.js"))
+  );
+  const { grammarHint } = await import(
+    pathToFileURL(path.join(compiled, "grammarHints.js"))
+  );
+  const { grammar: baseGrammar } = await import(
+    pathToFileURL(path.join(compiled, "grammar.js"))
+  );
+  assert.equal(tenses.length, 16);
+  assert.equal(new Set(tenses.map((t) => t.id)).size, 16);
+  for (const group of ["现在", "过去", "将来", "过去将来"])
+    assert.equal(tenses.filter((t) => t.group === group).length, 4);
+  for (const tense of tenses) {
+    for (const field of [
+      "name",
+      "english",
+      "usage",
+      "structure",
+      "negative",
+      "question",
+      "clues",
+      "pitfall",
+      "example",
+      "translation",
+    ])
+      assert(tense[field]?.trim(), `${tense.id}: ${field}`);
+    assert(tenses.some((t) => t.id === tense.contrast.id));
+    assert.notEqual(tense.contrast.id, tense.id);
+    assert(tense.exercises.length >= 3);
+  }
+  const tenseQuestions = [...tenses.flatMap((t) => t.exercises), ...mixedTenseExercises];
+  assert.equal(tenseQuestions.length, 54);
+  assert.equal(new Set(tenseQuestions.map((q) => q.sentence)).size, 54);
+  for (const q of tenseQuestions) {
+    assert.equal((q.sentence.match(/______/g) ?? []).length, 1, q.sentence);
+    assert(q.verb.trim() && q.translation.trim() && q.reason.trim());
+    assert(tenseAnswerMatches(q, "  " + q.answer.toUpperCase() + "  "));
+    assert(!tenseAnswerMatches(q, ""));
+    for (const alternate of q.alternatives) assert(tenseAnswerMatches(q, alternate));
+  }
+  for (const q of mixedTenseExercises) assert(tenses.some((t) => t.id === q.tenseId));
+  const presentNegative = tenses[0].exercises[1];
+  assert(tenseAnswerMatches(presentNegative, " DOESN’T   DRINK "));
+  assert(!tenseAnswerMatches(presentNegative, "does not drinks"));
+  assert(!tenseAnswerMatches(tenses[2].exercises[0], "have send"));
+  const timeClause = mixedTenseExercises.at(-1);
+  assert.equal(timeClause.tenseId, "present-simple");
+  assert(!tenseAnswerMatches(timeClause, "will get"));
+  for (const focus of [...baseGrammar, ...dailyLessons.map((l) => l.grammar)]) {
+    const teaching = grammarHint(focus);
+    assert(teaching.label.trim() && teaching.structure.trim() && teaching.note.trim());
+    for (const id of teaching.tenseIds) assert(tenses.some((t) => t.id === id));
+  }
+  for (const day of [2, 3, 4, 10, 11, 15, 16, 25])
+    assert.equal(
+      grammarHint(dailyLessons[day - 1].grammar).tenseIds.length,
+      0,
+      `Day ${day}: polite modal is not automatically past`,
+    );
+  assert.deepEqual(grammarHint(dailyLessons[21].grammar).tenseIds, [
+    "future-simple",
+    "present-simple",
+  ]);
+  console.log(
+    `PASS: 16 tense guides, 54 tense exercises, hints for ${baseGrammar.length + dailyLessons.length} grammar topics; contractions, non-tense modals and future time-clause regressions.`,
+  );
   assert.deepEqual(contexts, { daily: 15, work: 15 });
   // Regression: invalid initial candidates must not reduce the number of exercises.
   const retry = structuredClone(dailyLessons[0]);

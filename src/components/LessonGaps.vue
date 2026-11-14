@@ -4,6 +4,7 @@ import type { DailyLesson } from "../data/lessons";
 import { lessonGaps, normalizeGapAnswer } from "../data/lessonGaps";
 import type { TrainerContext } from "../composables/useTrainer";
 import { useReinforcementStore } from "../stores/reinforcement";
+import GrammarTenseHint from "./GrammarTenseHint.vue";
 import GapFeedback from "./GapFeedback.vue";
 const { store } = inject<TrainerContext>("trainer")!;
 const reinforcement = useReinforcementStore();
@@ -67,6 +68,7 @@ function submit() {
             }}{{ checked[i] ? (isCorrect(i) ? " ✓" : " · 待订正") : "" }}</v-btn
           >
         </div>
+        <GrammarTenseHint v-if="q.type === '语法'" :focus="lesson.grammar" class="mb-3" />
         <p lang="en" class="text-body-1">{{ q.sentence }}</p>
         <p class="text-caption muted mb-2">{{ q.hint }}</p>
         <v-form @submit.prevent="submit"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GrammarTenseHint from "../GrammarTenseHint.vue";
 import { computed, inject, watch } from "vue";
 import LessonDialogue from "../LessonDialogue.vue";
 import LessonGaps from "../LessonGaps.vue";
@@ -275,6 +276,7 @@ const learningRoutes = [
             >
             <h3>{{ lesson.grammar.title }}</h3>
             <p class="grammar-example">{{ lesson.grammar.example }}</p>
+            <GrammarTenseHint :focus="lesson.grammar" class="mt-3" />
             <div class="preview-bottom">
               <span>读懂句子背后的规律</span
               ><v-btn

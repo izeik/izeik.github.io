@@ -23,6 +23,7 @@ export function useTrainer() {
     { id: "speaking", label: "情景口语", icon: "mdi-forum-outline" },
     { id: "pronunciation", label: "语音训练", icon: "mdi-microphone-outline" },
     { id: "grammar", label: "语法练习", icon: "mdi-text-box-check-outline" },
+    { id: "tenses", label: "英语时态", icon: "mdi-clock-outline" },
     { id: "errors", label: "错误记录", icon: "mdi-notebook-edit-outline" },
     { id: "statistics", label: "学习统计", icon: "mdi-chart-box-outline" },
   ];
@@ -192,6 +193,7 @@ export function useTrainer() {
       label === allDialogues[0]!.label ? store.speakingIndex % questions.length : 0;
   }
   const grammarIndex = ref(0);
+  const tenseId = ref("present-simple");
   const currentGrammar = computed(() => grammar[grammarIndex.value]!);
   const speak = (text: string, onEnd?: () => void, onError?: () => void) => {
     if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") {
@@ -349,6 +351,7 @@ export function useTrainer() {
     scenarioIndex,
     selectedPrompt,
     grammarIndex,
+    tenseId,
     currentGrammar,
     speak,
     nextExpression,

@@ -5,6 +5,7 @@ import DashboardView from "./components/views/DashboardView.vue";
 import VocabularyView from "./components/views/VocabularyView.vue";
 import SpeakingView from "./components/views/SpeakingView.vue";
 import PronunciationView from "./components/views/PronunciationView.vue";
+import TensesView from "./components/views/TensesView.vue";
 import GrammarView from "./components/views/GrammarView.vue";
 import ErrorsView from "./components/views/ErrorsView.vue";
 import StatisticsView from "./components/views/StatisticsView.vue";
@@ -20,13 +21,18 @@ const views = {
   speaking: SpeakingView,
   pronunciation: PronunciationView,
   grammar: GrammarView,
+  tenses: TensesView,
   errors: ErrorsView,
   statistics: StatisticsView,
 };
 const activeView = computed(() => views[page.value as keyof typeof views]);
 const moreOpen = ref(false);
-const primaryNav = computed(() => nav.slice(0, 6));
-const secondaryNav = computed(() => nav.slice(6));
+const primaryNav = computed(() =>
+  nav.filter((item) => !["errors", "statistics"].includes(item.id)),
+);
+const secondaryNav = computed(() =>
+  nav.filter((item) => ["errors", "statistics"].includes(item.id)),
+);
 const mobileNav = computed(() =>
   nav.filter((item) =>
     ["dashboard", "vocabulary", "reading", "speaking"].includes(item.id),

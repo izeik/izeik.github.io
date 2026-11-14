@@ -175,7 +175,7 @@ const grammarFoundations = [
     "I’ve worked here for two years.",
     "I work here since two years.",
     "I’ve worked here for two years.",
-    "for 表示一段时间，搭配现在完成时。",
+    "for 表示时长；本句强调持续到现在，所以用现在完成时。",
   ],
   [
     "Future",
