@@ -240,6 +240,126 @@ try {
     readingGapCount += gaps.length;
   }
   assert.equal(readingGapCount, 120);
+  const { pictureWords, pictureWordById, pictureScenes, pictureWordParts } = await import(
+    pathToFileURL(path.join(compiled, "pictureVocabulary/index.js"))
+  );
+  const { createPictureRound, restorePictureRound, spellingMatches } = await import(
+    pathToFileURL(path.join(compiled, "pictureDrill.js"))
+  );
+  assert.equal(pictureWords.length, 1024);
+  assert.equal(pictureWordById.size, 1024);
+  assert(pictureWords.filter((w) => /^[a-z]+$/.test(w.word)).length > 1000);
+  for (const category of ["daily", "work"])
+    assert.equal(pictureWords.filter((w) => w.category === category).length, 512);
+  assert.equal(new Set(pictureWords.map((w) => w.scene)).size, 24);
+  const elementary = new Set(
+    "apple banana cat dog red blue school teacher student happy sad good bad go come eat drink read write work home family friend like love city bus car book desk chair table computer weekend holiday money buy sell shop office meeting help want need can must because future word second interest compare available explain review shadow".split(
+      " ",
+    ),
+  );
+  for (const w of pictureWords) {
+    assert(!elementary.has(w.word), `Elementary headword: ${w.word}`);
+    assert(/^[a-z]+(?:-[a-z]+)*$/.test(w.word));
+    assert(w.meaning.trim() && w.partOfSpeech.trim() && w.contrast.trim());
+    assert(pictureScenes[w.scene]);
+    assert.equal(w.category, w.scene < 12 ? "daily" : "work");
+    assert.equal(
+      [...w.sentence.matchAll(literal(w.word))].length,
+      1,
+      `${w.word}: one target in its own sentence`,
+    );
+    const parts = pictureWordParts(w);
+    assert.equal(parts.before + parts.target + parts.after, w.sentence);
+    assert(!literal(w.word).test(parts.before + "______" + parts.after));
+    assert.equal(w.peers.length, 3);
+    assert.equal(new Set([w.id, ...w.peers]).size, 4);
+    const peers = w.peers.map((id) => pictureWordById.get(id));
+    assert(
+      peers.every(
+        (p) =>
+          p &&
+          p.category === w.category &&
+          p.scene === w.scene &&
+          p.partOfSpeech === w.partOfSpeech &&
+          p.peers.includes(w.id),
+      ),
+    );
+    assert.equal(new Set([w.meaning, ...peers.map((p) => p.meaning)]).size, 4);
+    assert(spellingMatches(w, "  " + w.word.toUpperCase() + "  "));
+    assert(!spellingMatches(w, ""));
+  }
+  let seed = 1907;
+  const random = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  for (const scope of ["all", "daily", "work"])
+    for (const count of [5, 10, 20, 30, 50, 100]) {
+      const round = createPictureRound(pictureWords, scope, count, [], random);
+      assert.equal(round.ids.length, count);
+      assert.equal(new Set(round.ids).size, count);
+      assert(
+        round.ids.every(
+          (id) => scope === "all" || pictureWordById.get(id).category === scope,
+        ),
+      );
+      assert(restorePictureRound(round, pictureWordById));
+      assert(
+        round.ids.every(
+          (id) => round.options[id].length === 4 && round.options[id].includes(id),
+        ),
+      );
+    }
+  const drill = createPictureRound(pictureWords, "all", 20, [], random);
+  const positions = new Set(drill.ids.map((id) => drill.options[id].indexOf(id)));
+  assert.equal(positions.size, 4);
+  const freshWords = createPictureRound(
+    pictureWords,
+    "all",
+    5,
+    pictureWords.slice(0, -5).map((w) => w.id),
+    random,
+  );
+  assert(freshWords.ids.every((id) => pictureWords.slice(-5).some((w) => w.id === id)));
+  for (const count of [0, 4, 101, NaN, 5.5])
+    assert.throws(() => createPictureRound(pictureWords, "all", count));
+  assert(spellingMatches(pictureWordById.get("apologize"), "APOLOGISE"));
+  assert(!spellingMatches(pictureWordById.get("burnt-out"), "burntout"));
+  for (const corrupted of [
+    { ...drill, index: 20 },
+    { ...drill, phase: "offer" },
+    { ...drill, ids: [drill.ids[0], ...drill.ids.slice(0, -1)] },
+    { ...drill, options: {} },
+  ])
+    assert.equal(restorePictureRound(corrupted, pictureWordById), null);
+  const offered = {
+    ...drill,
+    phase: "offer",
+    choices: Object.fromEntries(drill.ids.map((id) => [id, id])),
+  };
+  assert(restorePictureRound(offered, pictureWordById));
+  const spellingRound = {
+    ...offered,
+    phase: "spelling",
+    index: 1,
+    spellingOrder: [...drill.ids],
+    spellings: { [drill.ids[0]]: false },
+  };
+  assert(restorePictureRound(spellingRound, pictureWordById));
+  assert.equal(
+    restorePictureRound(
+      { ...spellingRound, spellingOrder: drill.ids.slice(1) },
+      pictureWordById,
+    ),
+    null,
+  );
+  for (const filename of ["vocabulary-daily.webp", "vocabulary-work.webp"]) {
+    const png = await readFile(path.join(root, "public/images", filename));
+    assert.equal(png.subarray(0, 4).toString(), "RIFF");
+    assert.equal(png.subarray(8, 16).toString(), "WEBPVP8 ");
+    assert.equal(png.readUInt16LE(26) & 0x3fff, 1536);
+    assert.equal(png.readUInt16LE(28) & 0x3fff, 1024);
+  }
+  console.log(
+    "PASS: 1024 unique picture words (512 daily/512 work), 24 local scenes, 256 contrast sets, source sentences, spelling variants, randomized rounds and saved-state validation.",
+  );
   const { tenses, tenseAnswerMatches, mixedTenseExercises } = await import(
     pathToFileURL(path.join(compiled, "tenses.js"))
   );

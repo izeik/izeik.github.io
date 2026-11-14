@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref } from "vue";
+import { computed, defineAsyncComponent, provide, ref } from "vue";
 import { useTrainer } from "./composables/useTrainer";
 import DashboardView from "./components/views/DashboardView.vue";
 import VocabularyView from "./components/views/VocabularyView.vue";
@@ -17,6 +17,9 @@ const { store, nav, page, notice } = trainer;
 const views = {
   dashboard: DashboardView,
   vocabulary: VocabularyView,
+  pictureDrill: defineAsyncComponent(
+    () => import("./components/views/PictureDrillView.vue"),
+  ),
   reading: ReadingView,
   speaking: SpeakingView,
   pronunciation: PronunciationView,

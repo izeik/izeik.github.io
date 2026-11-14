@@ -10,7 +10,8 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{vue,ts,css}\" README.md package.json vite.config.ts tsconfig.json",
-    "format:check": "prettier --check \"src/**/*.{vue,ts,css}\" README.md package.json vite.config.ts tsconfig.json"
+    "format:check": "prettier --check \"src/**/*.{vue,ts,css}\" README.md package.json vite.config.ts tsconfig.json",
+    "check:picture": "node scripts/check-picture-drill.mjs"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

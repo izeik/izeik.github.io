@@ -199,6 +199,21 @@ const learningRoutes = [
       </button>
     </div>
 
+    <v-card
+      class="pa-5 mt-5 d-flex flex-wrap align-center justify-space-between ga-4"
+      variant="tonal"
+      color="primary"
+      ><div>
+        <div class="eyebrow">NEW · WORDS IN CONTEXT</div>
+        <h2 class="text-h6 mt-2">进阶看图刷词 · 1024 词</h2>
+        <p class="text-body-2 mt-2">
+          例句与场景图，四选一辨义；刷完还可把同一批词再拼一轮。
+        </p>
+      </div>
+      <v-btn color="primary" append-icon="mdi-arrow-right" @click="page = 'pictureDrill'"
+        >开始看图刷词</v-btn
+      ></v-card
+    >
     <LessonDialogue :key="`dialogue-${lesson.day}`" :lesson="lesson" />
     <div class="section-heading mt-6">
       <div>

@@ -19,6 +19,7 @@ export function useTrainer() {
   const nav = [
     { id: "dashboard", label: "学习首页", icon: "mdi-view-dashboard-outline" },
     { id: "vocabulary", label: "词语搭配", icon: "mdi-book-open-variant" },
+    { id: "pictureDrill", label: "看图刷词", icon: "mdi-image-text" },
     { id: "reading", label: "文章阅读", icon: "mdi-book-open-page-variant-outline" },
     { id: "speaking", label: "情景口语", icon: "mdi-forum-outline" },
     { id: "pronunciation", label: "语音训练", icon: "mdi-microphone-outline" },
