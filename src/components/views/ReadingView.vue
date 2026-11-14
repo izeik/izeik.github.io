@@ -2,6 +2,7 @@
 import { computed, inject, onBeforeUnmount, ref, watch } from "vue";
 import type { TrainerContext } from "../../composables/useTrainer";
 import { splitEnglishSentences, type ReadingArticle } from "../../data/articles";
+import { readingGaps } from "../../data/readingGaps";
 import GapFeedback from "../GapFeedback.vue";
 import { dailyLessons } from "../../data/lessons";
 import { readingTokens } from "../../data/readingTokens";
@@ -28,12 +29,23 @@ const tokenizedSentences = computed(
     ),
 );
 const selectedAnswers = ref<number[]>([]);
-const gapAnswer = ref("");
+const gaps = computed(() => readingGaps(article.value, lookupEntries.value));
+type GapState = {
+  answer: string;
+  checked: boolean;
+  lastAnswer: string;
+  accepted: boolean;
+};
+const freshGapStates = () =>
+  gaps.value.map((): GapState => ({
+    answer: "",
+    checked: false,
+    lastAnswer: "",
+    accepted: false,
+  }));
+const gapStates = ref<GapState[]>(freshGapStates());
 const checkedReading = ref(false);
-const checkedGap = ref(false);
 const lastAnswers = ref<number[]>([]);
-const lastGap = ref("");
-const acceptedAlternative = ref(false);
 const shadowing = ref(false);
 const activeSentence = ref("");
 const showTranslations = ref(false);
@@ -57,19 +69,29 @@ const hasNewAnswers = computed(
     allAnswered.value &&
     selectedAnswers.value.some((answer, i) => answer !== lastAnswers.value[i]),
 );
-const hasNewGap = computed(
-  () => !!gapAnswer.value.trim() && normalizeAnswer(gapAnswer.value) !== lastGap.value,
-);
-const gapCorrect = computed(
-  () => normalizeAnswer(gapAnswer.value) === normalizeAnswer(article.value.gap.answer),
+function hasNewGap(index: number) {
+  const state = gapStates.value[index]!;
+  return !!state.answer.trim() && normalizeAnswer(state.answer) !== state.lastAnswer;
+}
+function gapCorrect(index: number) {
+  return (
+    normalizeAnswer(gapStates.value[index]!.answer) ===
+    normalizeAnswer(gaps.value[index]!.answer)
+  );
+}
+function gapPassed(index: number) {
+  const state = gapStates.value[index]!;
+  return state.checked && (gapCorrect(index) || state.accepted);
+}
+const passedGapCount = computed(
+  () => gaps.value.filter((_, index) => gapPassed(index)).length,
 );
 const canFinish = computed(
   () =>
     !completed.value &&
     checkedReading.value &&
-    checkedGap.value &&
     readingScore.value === article.value.questions.length &&
-    (gapCorrect.value || acceptedAlternative.value),
+    gaps.value.every((_, index) => gapPassed(index)),
 );
 let playback = 0;
 function stopPlayback() {
@@ -84,12 +106,9 @@ onBeforeUnmount(stopPlayback);
 
 function resetPractice() {
   selectedAnswers.value = [];
-  gapAnswer.value = "";
+  gapStates.value = freshGapStates();
   checkedReading.value = false;
-  checkedGap.value = false;
   lastAnswers.value = [];
-  lastGap.value = "";
-  acceptedAlternative.value = false;
   stopPlayback();
 }
 
@@ -125,48 +144,43 @@ function checkReading() {
   lastAnswers.value = [...selectedAnswers.value];
 }
 
-function checkGap() {
-  if (checkedGap.value || !hasNewGap.value) return;
-  checkedGap.value = true;
-  lastGap.value = normalizeAnswer(gapAnswer.value);
-  acceptedAlternative.value = false;
-  reinforcement.record("阅读补全", gapCorrect.value);
-  if (!gapCorrect.value)
+function checkGap(index: number) {
+  const state = gapStates.value[index]!,
+    question = gaps.value[index]!;
+  if (state.checked || !hasNewGap(index)) return;
+  state.checked = true;
+  state.lastAnswer = normalizeAnswer(state.answer);
+  state.accepted = false;
+  reinforcement.record("阅读补全", gapCorrect(index));
+  if (!gapCorrect(index))
     store.addError(
-      gapAnswer.value.trim(),
-      article.value.gap.answer,
+      state.answer.trim(),
+      question.answer,
       "阅读补全 · 待复习",
-      article.value.title,
-      {
-        sentence: article.value.gap.sentence,
-        answer: article.value.gap.answer,
-        hint: article.value.gap.hint,
-      },
+      `${article.value.title} · 第 ${index + 1} 题`,
+      { sentence: question.sentence, answer: question.answer, hint: question.hint },
     );
   store.logSession(1);
 }
-
-function onGapReviewed(result: { verdict: string; suggestion: string; reason: string }) {
-  if (!checkedGap.value || gapCorrect.value) return;
-  acceptedAlternative.value = result.verdict === "natural";
-  if (result.verdict === "natural") {
-    const entry = store.errors.find(
-      (e) =>
-        e.type === "阅读补全 · 待复习" &&
-        e.exercise?.sentence === article.value.gap.sentence,
-    );
-    if (entry) store.resolveError(entry.id, true, "ai");
-  }
-  if (result.verdict === "unsuitable") {
-    const entry = store.errors.find(
-      (e) =>
-        e.type === "阅读补全 · 待复习" &&
-        e.exercise?.sentence === article.value.gap.sentence,
-    );
-    if (entry) {
-      entry.note = `《${article.value.title}》 · AI 解析：${result.reason}`;
-      if (entry.exercise) entry.exercise.hint = result.reason;
-    }
+function editGap(index: number) {
+  gapStates.value[index]!.checked = false;
+  gapStates.value[index]!.accepted = false;
+}
+function onGapReviewed(
+  index: number,
+  result: { verdict: string; suggestion: string; reason: string },
+) {
+  const state = gapStates.value[index]!,
+    question = gaps.value[index]!;
+  if (!state.checked || gapCorrect(index)) return;
+  state.accepted = result.verdict === "natural";
+  const entry = store.errors.find(
+    (e) => e.type === "阅读补全 · 待复习" && e.exercise?.sentence === question.sentence,
+  );
+  if (entry && result.verdict === "natural") store.resolveError(entry.id, true, "ai");
+  if (entry && result.verdict === "unsuitable") {
+    entry.note = `《${article.value.title}》 · 第 ${index + 1} 题 · AI 解析：${result.reason}`;
+    if (entry.exercise) entry.exercise.hint = result.reason;
   }
 }
 
@@ -408,62 +422,79 @@ function chooseArticle(item: ReadingArticle) {
             >
           </div>
           <v-divider class="my-4" />
-          <div class="d-flex align-center ga-2 mb-3">
+          <div class="d-flex flex-wrap align-center ga-2 mb-3">
             <v-icon color="primary">mdi-form-textbox</v-icon>
-            <h3 class="text-h6">句子补全</h3>
-          </div>
-          <p class="text-body-1 mb-3">{{ article.gap.sentence }}</p>
-          <div class="d-flex flex-wrap align-center ga-3">
-            <v-text-field
-              v-model="gapAnswer"
-              maxlength="180"
-              label="填入缺少的单词或词组"
-              variant="outlined"
-              density="compact"
-              hide-details
-              class="gap-input"
-              :disabled="checkedGap"
-              @keyup.enter="checkGap"
-            />
-            <v-btn
-              variant="outlined"
-              :disabled="checkedGap || !hasNewGap"
-              @click="checkGap"
-              >检查答案</v-btn
-            >
-            <v-btn
-              v-if="checkedGap && !gapCorrect"
-              variant="text"
-              @click="checkedGap = false"
-              >修改填空</v-btn
+            <h3 class="text-h6">句子补全（{{ gaps.length }} 题）</h3>
+            <span class="text-caption muted ml-auto"
+              >已通过 {{ passedGapCount }} / {{ gaps.length }} 题</span
             >
           </div>
-          <div v-if="!checkedGap" class="text-caption muted mt-2">
-            {{ article.gap.hint }}
-          </div>
-          <v-alert
-            v-else
-            class="mt-3"
-            density="compact"
-            :type="gapCorrect || acceptedAlternative ? 'success' : 'info'"
-            variant="tonal"
+          <section
+            v-for="(question, index) in gaps"
+            :key="`${article.id}-${index}`"
+            class="reading-gap-question"
+            :data-reading-gap="index + 1"
+            :aria-label="`句子补全第 ${index + 1} 题`"
           >
-            {{
-              gapCorrect
-                ? "答对了！"
-                : acceptedAlternative
-                  ? "这个表达在句中也自然，可以完成本篇。"
-                  : `原文用词：${article.gap.answer}。可查看 AI 解析，判断你的表达是否也适合。`
-            }}
-          </v-alert>
-          <GapFeedback
-            v-if="checkedGap"
-            :sentence="article.gap.sentence"
-            :reference="article.gap.answer"
-            :answer="gapAnswer"
-            :focus="article.title + ' · ' + article.gap.hint"
-            @reviewed="onGapReviewed"
-          />
+            <h4 class="text-subtitle-2 mb-2">第 {{ index + 1 }} 题</h4>
+            <p class="text-body-1 mb-3" lang="en">{{ question.sentence }}</p>
+            <v-form @submit.prevent="checkGap(index)"
+              ><div class="d-flex flex-wrap align-center ga-3">
+                <v-text-field
+                  v-model="gapStates[index]!.answer"
+                  maxlength="180"
+                  :label="`第 ${index + 1} 题：填入缺少的单词或词组`"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  class="gap-input"
+                  :disabled="gapStates[index]!.checked"
+                /><v-btn
+                  variant="outlined"
+                  type="submit"
+                  :disabled="gapStates[index]!.checked || !hasNewGap(index)"
+                  >检查第 {{ index + 1 }} 题</v-btn
+                ><v-btn
+                  v-if="gapStates[index]!.checked && !gapCorrect(index)"
+                  variant="text"
+                  :aria-label="`修改第 ${index + 1} 题填空`"
+                  @click="editGap(index)"
+                  >修改填空</v-btn
+                >
+              </div></v-form
+            >
+            <p v-if="!gapStates[index]!.checked" class="text-caption muted mt-2">
+              {{ question.hint }}
+            </p>
+            <v-alert
+              v-else
+              class="mt-3"
+              density="compact"
+              :type="gapPassed(index) ? 'success' : 'info'"
+              variant="tonal"
+              >{{
+                gapCorrect(index)
+                  ? "答对了！"
+                  : gapStates[index]!.accepted
+                    ? "这个表达在句中也自然，本题已通过。"
+                    : `原文用词：${question.answer}。可查看 AI 解析，判断你的表达是否也适合。`
+              }}</v-alert
+            >
+            <GapFeedback
+              v-if="gapStates[index]!.checked"
+              :sentence="question.sentence"
+              :reference="question.answer"
+              :answer="gapStates[index]!.answer"
+              :focus="
+                article.title +
+                ' · ' +
+                question.hint +
+                '\n' +
+                article.paragraphs.map((p) => p.text).join('\n')
+              "
+              @reviewed="(result) => onGapReviewed(index, result)"
+            />
+          </section>
           <div class="d-flex flex-wrap align-center ga-3 mt-5">
             <v-btn
               color="success"
@@ -481,6 +512,12 @@ function chooseArticle(item: ReadingArticle) {
 </template>
 
 <style scoped>
+.reading-gap-question {
+  padding: 20px 0;
+}
+.reading-gap-question + .reading-gap-question {
+  border-top: 1px solid #e2e6dc;
+}
 .article-picker {
   position: sticky;
   top: 16px;

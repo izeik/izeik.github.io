@@ -48,7 +48,7 @@ try {
   const { lessonGaps, normalizeGapAnswer } = await import(
     pathToFileURL(path.join(compiled, "lessonGaps.js"))
   );
-  const { splitEnglishSentences } = await import(
+  const { splitEnglishSentences, articles: baseArticles } = await import(
     pathToFileURL(path.join(compiled, "articles.js"))
   );
   const { expressions } = await import(pathToFileURL(path.join(compiled, "content.js")));
@@ -196,6 +196,50 @@ try {
       `| ${lesson.day} | ${lesson.theme} | ${singles} / ${20 - singles} | 20 / 20 | 6 | ${lesson.vocabularyGroups.map((g) => g.title).join(" → ")} |`,
     );
   }
+  const { readingGaps } = await import(
+    pathToFileURL(path.join(compiled, "readingGaps.js"))
+  );
+  const lessonByArticle = new Map(
+    dailyLessons.map((lesson) => [lesson.article.id, lesson]),
+  );
+  let readingGapCount = 0;
+  for (const base of baseArticles) {
+    const lesson = lessonByArticle.get(base.id);
+    const article = lesson?.article ?? base;
+    const gaps = readingGaps(article, [...(lesson?.vocabulary ?? []), ...expressions]);
+    assert.equal(gaps.length, 3, `Reading ${article.id}: exactly three completions`);
+    assert.equal(
+      new Set(gaps.map((g) => g.sentence)).size,
+      3,
+      `Reading ${article.id}: distinct questions`,
+    );
+    assert.equal(
+      new Set(gaps.map((g) => normalizeGapAnswer(g.answer))).size,
+      3,
+      `Reading ${article.id}: different targets`,
+    );
+    gaps.forEach((gap, index) => {
+      assert.equal((gap.sentence.match(/______/g) ?? []).length, 1);
+      assert(
+        !gap.sentence.match(literal(gap.answer)),
+        `Reading ${article.id}: no visible answer`,
+      );
+      assert(gap.hint.trim());
+      assert(
+        article.paragraphs.some((p) => p.text.match(literal(gap.answer))),
+        `Reading ${article.id}: answer from text`,
+      );
+      if (index > 0)
+        assert(
+          article.paragraphs.some((p) =>
+            p.text.includes(gap.sentence.replace("______", gap.answer)),
+          ),
+          `Reading ${article.id}: extra gap exact source`,
+        );
+    });
+    readingGapCount += gaps.length;
+  }
+  assert.equal(readingGapCount, 120);
   assert.deepEqual(contexts, { daily: 15, work: 15 });
   // Regression: invalid initial candidates must not reduce the number of exercises.
   const retry = structuredClone(dailyLessons[0]);
@@ -213,7 +257,7 @@ try {
   assert.equal(normalizeGapAnswer("  LET’S   try  "), "let's try");
   assert.equal(normalizeGapAnswer("  MORNING "), "morning");
   console.log(
-    "PASS: 30 lessons, 600 vocabulary entries, 180 consolidation gaps, 120 dialogue turns, 15 daily/15 workplace lessons; IDs, optional extensions, groups, original examples and regressions.",
+    "PASS: 30 lessons, 600 vocabulary entries, 180 consolidation gaps, 120 reading completions across 40 articles, 120 dialogue turns, 15 daily/15 workplace lessons; IDs, optional extensions, groups, original examples and regressions.",
   );
   if (process.argv.includes("--report")) {
     await writeFile(

@@ -1,4 +1,10 @@
 /** Short intermediate readings for practical daily and IT workplace English. */
+export interface ReadingGap {
+  sentence: string;
+  answer: string;
+  hint: string;
+}
+
 export interface ReadingArticle {
   id: number;
   title: string;
@@ -11,7 +17,8 @@ export interface ReadingArticle {
     sentenceTranslations: string[];
   }[];
   questions: { prompt: string; options: string[]; answer: number; explanation: string }[];
-  gap: { sentence: string; answer: string; hint: string };
+  /** Curated seed, expanded to three reading exercises by readingGaps. */
+  gap: ReadingGap;
 }
 
 const rows: [
